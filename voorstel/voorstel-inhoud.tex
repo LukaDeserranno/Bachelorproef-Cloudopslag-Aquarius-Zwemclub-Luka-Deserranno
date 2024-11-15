@@ -73,14 +73,14 @@ Het gebrek aan integratie met de bestaande systemen zorgt voor extra werk voor d
 toegangsbeheer maakt het moeilijk om de juiste rechten op elk tijdstip te garanderen voor alle gebruikers. Bovendien vereist Dropbox dat 
 elke gebruiker een account aanmaakt, wat een extra drempel kan vormen voor lesgevers die niet vertrouwd zijn met de dienst.
 
-Dropbox biedt via de Dropbox API de mogelijkheid om cloudopslagfunctionaliteiten, zoals bestandenbeheer en mappenbeheer, in webapplicaties te integreren \cite{dropbox_api}. 
+Dropbox biedt via de Dropbox API de mogelijkheid om cloudopslagfunctionaliteiten, zoals bestandenbeheer en mappenbeheer, in webapplicaties te integreren \autocite{dropbox_api}. 
 De API stelt ontwikkelaars in staat om bestanden te uploaden, downloaden, mappen te creëren en bestanden te delen, wat ideaal lijkt voor het delen van 
 bestanden tussen lesgevers bij Aquarius Zwemclub Lebbeke (AZL). Echter, de meeste van deze functies vereisen het gebruik van OAuth 2.0 voor de authenticatie 
-en autorisatie van gebruikers \cite{oauth2_documentation}.
+en autorisatie van gebruikers \autocite{dropbox_oauth}.
 
 De webapplicatie voor de lesgevers bij AZL maakt geen gebruik van OAuth 2.0 voor authenticatie. Dit betekent dat, in de huidige opzet van de applicatie, 
 het technisch niet eenvoudig is om gebruikers veilig toegang te geven tot hun Dropbox-accounts zonder dat hun inloggegevens gedeeld worden. Om Dropbox te 
-integreren, zou het volledige authenticatiesysteem van de applicatie moeten worden omgebouwd om OAuth 2.0-ondersteuning toe te voegen \cite{oauth2_documentation}. Dit houdt in dat de 
+integreren, zou het volledige authenticatiesysteem van de applicatie moeten worden omgebouwd om OAuth 2.0-ondersteuning toe te voegen \autocite{dropbox_oauth}. Dit houdt in dat de 
 applicatie de benodigde infrastructuur moet opzetten om gebruikers via OAuth 2.0 te authenticeren, wat een significante verandering in het huidige systeem vereist.
 
 Zonder OAuth 2.0 zou de applicatie afhankelijk moeten zijn van andere methoden om verbinding te maken met Dropbox, zoals het handmatig verstrekken van API-sleutels 
