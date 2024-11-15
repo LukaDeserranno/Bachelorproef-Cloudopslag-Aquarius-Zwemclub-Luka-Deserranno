@@ -54,10 +54,49 @@ Aquarius Zwemclub Lebbeke (AZL) maakt momenteel gebruik van een eenvoudige maar 
     \item \textbf{Hosting}: De WordPress-website en een webapplicatie gebouwd met Angular en Node.js zijn gehost op DigitalOcean.
     \item \textbf{E-mailservices}: De SMTP-server wordt gehost bij AWS, dit omdat deze functionaliteit niet beschikbaar is bij DigitalOcean.
     \item \textbf{Cloudopslag}: Voor het delen van bestanden tussen lesgevers wordt Dropbox gebruikt.
+    \item \textbf{Authenticatie en autorisatie}: De webapplicatie maakt gebruik van een zelfgebouwd authenticatiesysteem, er wordt dus geen gebruik externe diensten
 \end{itemize}
 Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: er is geen integratie tussen de cloudopslag en de 
 WordPress-website of webapplicatie, en geautomatiseerd toegangsbeheer ontbreekt. Een complete oplossing kan deze problemen aanpakken 
 door integratie tussen de cloudopslag en de applicaties mogelijk te maken, wat zal zorgen voor een gebruiksvriendelijkere en efficiëntere werking.
+
+\subsection{Vergelijking van cloudopslagoplossingen}
+Deze literatuurstudie onderzoekt verschillende cloudopslagoplossingen die geschikt zijn voor kleinere organisaties zoals AZL. 
+De focus ligt op oplossingen die eenvoudig kunnen worden geïntegreerd met bestaande systemen en een goede balans bieden tussen gebruiksgemak, 
+beveiliging en kosteneffectiviteit. De vergelijking omvat enkele van de meest populaire cloudopslagdiensten, zoals Amazon S3, Google Cloud Storage, 
+Microsoft Azure, DigitalOcean Spaces en Nextcloud. Om beter te begrijpen waarom de huidige cloudoplossing (Dropbox) niet langer voldoet, wordt ook 
+Dropbox meegenomen in de analyse.
+
+\subsubsection{Dropbox}
+Hoewel Dropbox een gebruiksvriendelijke oplossing biedt voor het delen van bestanden, voldoet het niet aan alle behoeften van AZL. 
+Het gebrek aan integratie met de bestaande systemen zorgt voor extra werk voor de beheerders, en het ontbreken van geautomatiseerd 
+toegangsbeheer maakt het moeilijk om de juiste rechten op elk tijdstip te garanderen voor alle gebruikers. Bovendien vereist Dropbox dat 
+elke gebruiker een account aanmaakt, wat een extra drempel kan vormen voor lesgevers die niet vertrouwd zijn met de dienst.
+
+Dropbox biedt via de Dropbox API de mogelijkheid om cloudopslagfunctionaliteiten, zoals bestandenbeheer en mappenbeheer, in webapplicaties te integreren \cite{dropbox_api}. 
+De API stelt ontwikkelaars in staat om bestanden te uploaden, downloaden, mappen te creëren en bestanden te delen, wat ideaal lijkt voor het delen van 
+bestanden tussen lesgevers bij Aquarius Zwemclub Lebbeke (AZL). Echter, de meeste van deze functies vereisen het gebruik van OAuth 2.0 voor de authenticatie 
+en autorisatie van gebruikers \cite{oauth2_documentation}.
+
+De webapplicatie voor de lesgevers bij AZL maakt geen gebruik van OAuth 2.0 voor authenticatie. Dit betekent dat, in de huidige opzet van de applicatie, 
+het technisch niet eenvoudig is om gebruikers veilig toegang te geven tot hun Dropbox-accounts zonder dat hun inloggegevens gedeeld worden. Om Dropbox te 
+integreren, zou het volledige authenticatiesysteem van de applicatie moeten worden omgebouwd om OAuth 2.0-ondersteuning toe te voegen \cite{oauth2_documentation}. Dit houdt in dat de 
+applicatie de benodigde infrastructuur moet opzetten om gebruikers via OAuth 2.0 te authenticeren, wat een significante verandering in het huidige systeem vereist.
+
+Zonder OAuth 2.0 zou de applicatie afhankelijk moeten zijn van andere methoden om verbinding te maken met Dropbox, zoals het handmatig verstrekken van API-sleutels 
+of toegangstokens. Deze benadering is echter niet aanbevolen, omdat het in strijd is met moderne beveiligingspraktijken. Het ontbreken van OAuth 2.0 betekent 
+dat de applicatie niet de benodigde bescherming kan bieden voor gebruikersgegevens, waardoor de vertrouwelijkheid en de integriteit van opgeslagen bestanden 
+in gevaar komen.
+
+Daarnaast is de opslagcapaciteit van een gratis persoonlijk Dropbox-account beperkt tot 2 GB, wat mogelijk onvoldoende is voor de toekomstige behoeften van AZL, 
+vooral wanneer meerdere gebruikers bestanden moeten delen en opslaan. Het beheer van gebruikersmappen en het toekennen van individuele toegang tot deze 
+mappen is ook problematisch, omdat de API geen methode biedt om toegang per gebruiker te regelen zonder OAuth 2.0.
+
+Gezien de beperkingen van een gratis persoonlijk Dropbox-account, het ontbreken van OAuth 2.0-authenticatie, en de noodzaak om het gehele authenticatiesysteem 
+om te bouwen, is de integratie van Dropbox in de webapplicatie voor lesgevers technisch haalbaar, maar het vereist aanzienlijke aanpassingen aan de infrastructuur 
+en beveiligingsstructuur van de applicatie.
+
+
 
 %---------- Methodologie ------------------------------------------------------
 \section{Methodologie}%
