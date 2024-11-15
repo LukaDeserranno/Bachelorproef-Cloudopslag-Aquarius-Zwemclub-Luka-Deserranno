@@ -48,42 +48,17 @@ Het doel van dit onderzoek is om verschillende cloudopslagoplossingen te vergeli
 \section{Literatuurstudie}%
 \label{sec:literatuurstudie}
 
-Binnen Aquarius Zwemclub Lebbeke (AZL) is er een dringende behoefte aan een cloudopslagoplossing die zowel gebruiksvriendelijk is als makkelijk kan worden geïntegreerd met hun bestaande webapplicatie. De oplossing moet de mogelijkheid bieden om documenten efficiënt te delen tussen lesgevers, terwijl ze ook voldoen aan de vereisten voor toegangsbeheer en beveiliging. Deze literatuurstudie onderzoekt vier populaire cloudopslagoplossingen: Dropbox, Amazon S3, Nextcloud en Microsoft OneDrive. We vergelijken deze op basis van integratiemogelijkheden met webapplicaties, kosten, toegangsbeheer, beveiliging en gebruiksvriendelijkheid.
-
-\subsection{Dropbox}
-Dropbox is een van de meest populaire cloudopslagoplossingen, bekend om zijn eenvoud en gebruiksvriendelijke interface. Het biedt een degelijke integratie met verschillende webapplicaties, zoals via Dropbox Business API's, die het mogelijk maken om bestanden eenvoudig te beheren en te delen binnen een webapplicatie. Er is echter een beperking op het gebied van diepgaande integratie en configuratie van geavanceerd toegangsbeheer.
-
-Dropbox biedt beperkte ondersteuning voor gedetailleerd toegangsbeheer binnen webapplicaties, wat betekent dat het voor AZL lastig kan zijn om verschillende gebruikersrollen en gedetailleerde machtigingen in hun webapplicatie te beheren. Dropbox ondersteunt wel basisfunctionaliteiten zoals het delen van mappen en bestanden via links, maar geavanceerdere functies zoals rollengebaseerd toegangsbeheer (RBAC) en integratie met andere applicaties vereisen extra configuratie of een premium abonnement.
-
-Wat betreft kosten biedt Dropbox een gratis plan met 2 GB opslagruimte, maar de betaalde versies beginnen vanaf ongeveer €10 per maand voor 2 TB opslagruimte ~\autocite{Dropbox2024}.
-
-\subsection{Amazon S3}
-Amazon Simple Storage Service (S3) is een cloudopslagoplossing die uitblinkt in schaalbaarheid en integratiecapaciteit. Het biedt een breed scala aan API's en SDK's die het gemakkelijk maken om S3 te integreren met webapplicaties. Amazon S3 is zeer flexibel en kan worden gebruikt om een breed scala aan bestanden op te slaan, van kleine documenten tot grote mediabestanden, wat het een populaire keuze maakt voor ontwikkelaars die cloudopslag willen integreren met hun applicaties.
-
-Wat betreft beveiliging biedt Amazon S3 robuuste maatregelen, waaronder encryptie van gegevens in rust en tijdens overdracht, en uitgebreide configuratieopties voor toegangsbeheer, zoals Identity and Access Management (IAM) voor het beheren van gebruikersrollen en machtigingen. Dit maakt Amazon S3 bijzonder geschikt voor organisaties die gedetailleerde controle nodig hebben over wie toegang heeft tot welke gegevens.
-
-Echter, Amazon S3 vereist meer technische expertise om effectief te implementeren, wat een uitdaging kan zijn voor kleinere organisaties zonder uitgebreide IT-ondersteuning. De kosten voor Amazon S3 variëren afhankelijk van de hoeveelheid opslag en dataverkeer, maar de prijs begint bij ongeveer €0,023 per GB per maand voor opslag ~\autocite{AWS2024}.
-
-\subsection{Nextcloud}
-Nextcloud is een open-source cloudopslagoplossing die bekend staat om zijn flexibiliteit en uitbreidbaarheid. Het biedt gebruikers de mogelijkheid om hun eigen cloudomgeving op te zetten, wat ideaal is voor organisaties die volledige controle over hun data willen behouden. Nextcloud is zeer geschikt voor integratie met webapplicaties, vooral via API's en de integratie van de Nextcloud-connectoren, die naadloos kunnen worden gekoppeld aan bestaande applicaties.
-
-Een belangrijk voordeel van Nextcloud is de mogelijkheid om gedetailleerd toegangsbeheer in te stellen. Met Nextcloud kunnen beheerders bepalen wie toegang heeft tot welke mappen of bestanden, en verschillende machtigingen kunnen per gebruiker of groep worden ingesteld. Dit maakt het een uitstekende keuze voor AZL, waar verschillende lesgevers toegang moeten hebben tot specifieke documenten.
-
-Wat betreft beveiliging biedt Nextcloud sterke encryptieopties voor data in rust en tijdens overdracht. Omdat het een open-source oplossing is, kunnen organisaties de beveiliging aanpassen en extra maatregelen implementeren. Daarnaast biedt Nextcloud functionaliteiten zoals two-factor authentication (2FA), wat de beveiliging verder versterkt.
-
-Wat kosten betreft, is Nextcloud zelf gratis te gebruiken als het op eigen servers wordt geïnstalleerd. Er kunnen echter kosten zijn voor hosting of voor het gebruik van de commerciële versie van Nextcloud, die extra ondersteuning en geavanceerde functionaliteiten biedt. De kosten voor de commerciële versie beginnen bij ongeveer €20 per gebruiker per jaar ~\autocite{Nextcloud2024}.
-
-\subsection{Vergelijking van Cloudopslagoplossingen}
-Bij het kiezen van de juiste cloudopslagoplossing voor AZL, is de mogelijkheid om de oplossing makkelijk te integreren met een webapplicatie van cruciaal belang.
-
+\subsection{Huidige IT-infrastructuur bij AZL}
+Aquarius Zwemclub Lebbeke (AZL) maakt momenteel gebruik van een eenvoudige maar doeltreffende IT-infrastructuur:
 \begin{itemize}
-    \item \textbf{Nextcloud} biedt uitstekende integratiemogelijkheden voor webapplicaties via verschillende API's en integraties. Het stelt AZL in staat om een volledig beheerde en aangepaste oplossing te creëren, terwijl het gedetailleerd toegangsbeheer en robuuste beveiliging biedt. Dit maakt het zeer geschikt voor de club, vooral gezien de behoefte aan controle over de toegang van verschillende lesgevers.
-    \item \textbf{Dropbox} is gebruiksvriendelijk en biedt een eenvoudige integratie via de Dropbox Business API, maar het mist de diepgaande controle over toegangsbeheer en integratiecapaciteit die nodig is voor complexe systemen zoals die van AZL.
-    \item \textbf{Amazon S3} biedt de grootste flexibiliteit en schaalbaarheid voor integratie met webapplicaties, maar vereist meer technische expertise en configuratie dan Nextcloud of Dropbox. Dit maakt het ideaal voor grotere organisaties met geavanceerde IT-ondersteuning, maar minder geschikt voor AZL zonder uitgebreide technische middelen.
+    \item \textbf{Hosting}: De WordPress-website en een webapplicatie gebouwd met Angular en Node.js zijn gehost op DigitalOcean.
+    \item \textbf{E-mailservices}: De SMTP-server wordt gehost bij AWS, dit omdat deze functionaliteit niet beschikbaar is bij DigitalOcean.
+    \item \textbf{Cloudopslag}: Voor het delen van bestanden tussen lesgevers wordt Dropbox gebruikt.
 \end{itemize}
+Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: er is geen integratie tussen de cloudopslag en de 
+WordPress-website of webapplicatie, en geautomatiseerd toegangsbeheer ontbreekt. Een complete oplossing kan deze problemen aanpakken 
+door integratie tussen de cloudopslag en de applicaties mogelijk te maken, wat zal zorgen voor een gebruiksvriendelijkere en efficiëntere werking.
 
-\subsection{Conclusie}
-Op basis van de behoefte van AZL aan eenvoudige integratie met hun webapplicatie en de vereisten voor toegangsbeheer en beveiliging, is Nextcloud de beste keuze. Het biedt robuuste integratiecapaciteiten, gebruiksvriendelijke interfaces en uitstekende beveiliging tegen een redelijke prijs. Amazon S3 is geschikt voor grotere schaalbehoeften, maar vereist technische expertise en biedt niet de gebruiksvriendelijke configuratie die AZL nodig heeft.
 %---------- Methodologie ------------------------------------------------------
 \section{Methodologie}%
 \label{sec:methodologie}
