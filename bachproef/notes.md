@@ -77,14 +77,74 @@ export class FileExplorerComponent implements OnInit {
 
 ---
 
-## Optie 2: Google Drive API
+## Optie 2: Amazon S3
 
 ### Backend Implementatie
+Amazon S3 biedt een robuuste cloudopslagoplossing met integratie via de `aws-sdk` in Node.js.
 
+#### Codevoorbeeld (Node.js API):
+```javascript
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: 'us-east-1'
+});
+
+app.get('/api/files', async (req, res) => {
+    const params = { Bucket: 'your-s3-bucket-name' };
+    try {
+        const data = await s3.listObjectsV2(params).promise();
+        res.json(data.Contents);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+```
+
+### Frontend Implementatie
+- **ngx-explorer** kan ook worden gebruikt voor Amazon S3.
+
+---
+
+## Optie 3: Microsoft Azure Blob Storage
+
+### Backend Implementatie
+Azure Blob Storage maakt gebruik van de `@azure/storage-blob` package voor Node.js.
+
+#### Codevoorbeeld (Node.js API):
+```javascript
+const { BlobServiceClient } = require('@azure/storage-blob');
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
+const containerClient = blobServiceClient.getContainerClient('your-container-name');
+
+app.get('/api/files', async (req, res) => {
+    try {
+        let fileList = [];
+        for await (const blob of containerClient.listBlobsFlat()) {
+            fileList.push(blob.name);
+        }
+        res.json(fileList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+```
+
+### Frontend Implementatie
+- **ngx-azure-file-manager**: Een bestaande package voor Azure.
+  - NPM package: [ngx-azure-file-manager](https://www.npmjs.com/package/ngx-azure-file-manager)
+
+---
+
+## Optie 4: Google Drive API
+
+### Backend Implementatie
 Google Drive biedt een API waarmee bestanden kunnen worden beheerd en opgehaald. Dit vereist authenticatie via OAuth en het gebruik van de Google Drive Node.js client.
 
 #### Codevoorbeeld (Node.js API):
-
 ```javascript
 const { google } = require('googleapis');
 const drive = google.drive({ version: 'v3', auth: oauth2Client });
@@ -119,14 +179,12 @@ app.get('/api/files', async (req, res) => {
 
 ---
 
-## Optie 3: Nextcloud
+## Optie 5: Nextcloud
 
 ### Backend Implementatie
-
 Nextcloud biedt een WebDAV API waarmee bestanden kunnen worden opgehaald en beheerd.
 
 #### Codevoorbeeld (Node.js API):
-
 ```javascript
 const axios = require('axios');
 const nextcloudUrl = 'https://nextcloud.example.com/remote.php/dav/files/username/';
@@ -141,7 +199,6 @@ app.get('/api/files', async (req, res) => {
     }
 });
 ```
-
 ### Frontend Implementatie
 
 - **ngx-webdav-client**: Ondersteunt WebDAV en kan gebruikt worden voor Nextcloud.
@@ -157,18 +214,17 @@ app.get('/api/files', async (req, res) => {
 
 - Vereist eigen serverbeheer
 - Extra configuratie nodig om WebDAV correct in te stellen
-- Veel meer werk om te onderhouden
+- Veel meer werk om te onderhoud
 
 ---
 
 ## Conclusie
-
 Hieronder een samenvatting van de mogelijke opties:
 
-| Optie                   | Cloudprovider | Integratiemethode                  | Voordelen                            | Nadelen                                            |
-| ----------------------- | ------------- | ---------------------------------- | ------------------------------------ | -------------------------------------------------- |
-| **DigitalOcean Spaces** | DigitalOcean  | AWS-SDK + ngx-explorer             | Naadloze integratie, goedkope opslag | Minder ingebouwde functionaliteit dan Google Drive |
-| **Google Drive**        | Google        | Google Drive API + ngx-filemanager | Bekend platform, sterke beveiliging  | OAuth vereist, API-limieten                        |
-| **Nextcloud**           | Self-hosted   | WebDAV + ngx-webdav-client         | Volledige controle, self-hosted      | Extra serverbeheer nodig                           |
-
-Voor AZL Lebbeke lijkt DigitalOcean Spaces de meest logische keuze aangezien de bestaande services, buiten de emailservice, in digital ocean draaien. Indien self hosted de voorkeur krijgt kan ook een nextcloud omgeving worden opgezet die runt in digital ocean, zorgt wel voor extra werk en onderhoud. 
+| Optie | Cloudprovider | Integratiemethode | Voordelen | Nadelen |
+|-------|--------------|-------------------|-----------|---------|
+| **DigitalOcean Spaces** | DigitalOcean | AWS-SDK + ngx-explorer | Naadloze integratie, goedkope opslag | Minder ingebouwde functionaliteit |
+| **Amazon S3** | AWS | AWS-SDK + ngx-explorer | Schaalbaar, breed ondersteund | Kosten kunnen oplopen |
+| **Microsoft Azure** | Azure | Azure SDK + ngx-azure-file-manager | Sterke security, integratie met Microsoft | Complexe configuratie |
+| **Google Drive** | Google | Google Drive API + ngx-filemanager | Bekend platform, sterke beveiliging | OAuth vereist, API-limieten |
+| **Nextcloud** | Self-hosted | WebDAV + ngx-webdav-client | Volledige controle, self-hosted | Extra serverbeheer nodig |
