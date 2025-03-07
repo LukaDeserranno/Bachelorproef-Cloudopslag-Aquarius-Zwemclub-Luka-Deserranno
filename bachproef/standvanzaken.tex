@@ -7,13 +7,146 @@
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de bachelorproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+Deze literatuurstudie onderzoekt beschikbare cloudopslagoplossingen die voldoen aan de specefieke behoeften van AZL. 
+De focus ligt op integratiemogelijkheden met de bestaande Angular frontend en Node.js backend, gebruiksvriendelijkheid, efficiënt toegangsbeheer en kosteneffectiviteit. 
+Deze studie vormt de basis voor het selecteren van een geschikte cloudopslagoplossing voor AZL.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+\subsection{Huidige IT-infrastructuur bij AZL}
+Aquarius Zwemclub Lebbeke (AZL) maakt momenteel gebruik van een eenvoudige maar doeltreffende IT-infrastructuur:
+\begin{itemize}
+    \item \textbf{Hosting}: De webapplicatie gebouwd met Angular en Node.js zijn gehost op DigitalOcean.
+    \item \textbf{E-mailservices}: De SMTP-server wordt gehost bij AWS, dit omdat deze functionaliteit niet beschikbaar is bij DigitalOcean.
+    \item \textbf{Cloudopslag}: Voor het delen van bestanden tussen lesgevers wordt Dropbox gebruikt.
+    \item \textbf{Authenticatie en autorisatie}: De webapplicatie maakt gebruik van een zelfgebouwd authenticatiesysteem, er wordt dus geen gebruik gemaakt van externe diensten. Binnen de applicatie wordt reeds gebruik gemaakt van rollen.
+\end{itemize}
+Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: er is geen integratie tussen de cloudopslag en de 
+webapplicatie, en geautomatiseerd toegangsbeheer ontbreekt. Een complete oplossing kan deze problemen aanpakken 
+door integratie tussen de cloudopslag en de applicaties mogelijk te maken, wat zal zorgen voor een gebruiksvriendelijkere en efficiëntere werking.
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+\subsection{Integratie van cloudopslag in webapplicaties}
+\subsubsection{Architecturele overwegingen}
+Bij het integreren van cloudopslag in webapplicaties is de architectuur een cruciale factor. Integratie kan worden gerealiseerd via drie primaire architecturele benaderingen:
+\begin{itemize}
+  \item \textbf{API-gebaseerde integratie}: De webapplicatie communiceert via API's met de cloudopslag.
+  \item \textbf{SDK-gebaseerde integratie}: Software Development Kits (SDK's) vereenvoudigen de communicatie tussen applicatie en cloudopslag.
+  \item \textbf{Hybride integratie}: Combinatie van API's en SDK's voor optimale flexibiliteit.
+\end{itemize}
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+\subsubsection{Frontend frameworks voor bestandsbeheer}
+Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschillende UI-frameworks beschikbaar. Dit maakt het ontwikkelen minder complex daar er al een component voor bestaat.
+
+\subsubsubsection{ngx-explorer}
+\texttt{ngx-explorer} is een Angular-component die uitgebreide ondersteuning biedt voor het beheren en visualiseren van bestanden in een cloudomgeving. De implementatie verloopt in enkele eenvoudige stappen:
+\begin{enumerate}
+  \item \textbf{Installatie}: Voeg de component toe aan je project via npm:
+  \begin{verbatim}
+npm install ngx-explorer
+  \end{verbatim}
+  \item \textbf{Module-integratie}: Importeer de \texttt{NgxExplorerModule} in de hoofdmodule van je Angular-applicatie:
+  \begin{verbatim}
+import { NgxExplorerModule } from 'ngx-explorer';
+...
+@NgModule({
+  imports: [
+    NgxExplorerModule,
+    ...
+  ],
+  ...
+})
+export class AppModule { }
+  \end{verbatim}
+  \item \textbf{Configuratie en gebruik}: Plaats de component in je template met de tag \texttt{<ngx-explorer>}. Via inputparameters en events kun je onder andere:
+  \begin{itemize}
+    \item De startmap en toegangsrechten instellen.
+    \item Thema’s en stijlen aanpassen middels CSS-overschrijvingen.
+    \item Evenementen zoals bestandsselectie of uploadstatus monitoren.
+  \end{itemize}
+\end{enumerate}
+
+Wat betreft aanpasbaarheid biedt \texttt{ngx-explorer} een solide basis:
+\begin{itemize}
+  \item De standaard UI heeft een gemiddelde flexibiliteit, maar door gebruik te maken van Angular's component-architectuur en uitgebreide CSS-opties is het relatief eenvoudig om de look en feel aan te passen.
+  \item De uitgebreide documentatie en actieve onderhoudsondersteuning zorgen ervoor dat ontwikkelaars snel problemen kunnen oplossen en de component kunnen uitbreiden naar specifieke behoeften.
+  \item De component ondersteunt integratie met diverse cloudopslagdiensten via zowel API's als SDK's, wat een hybride integratie mogelijk maakt en de schaalbaarheid van de applicatie waarborgt.
+\end{itemize}
+
+
+
+\subsection{Vergelijkende analyse van cloudopslagoplossingen}
+Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende cloudoplossingen beoordeeld op basis van criteria die specifiek aansluiten bij de uitdagingen en behoeften van de organisatie:
+\begin{itemize}
+    \item Geschikt zijn voor kleine tot middelgrote organisaties: De oplossing moet betaalbaar en beheersbaar zijn voor een sportvereniging met beperkte middelen.
+    \item Naadloos geïntegreerd kunnen worden: De oplossing moet aansluiten op de bestaande WordPress-website en Angular-webapplicatie.
+    \item Flexibel zijn in toegangsbeheer: De oplossing moet een efficiënte en veilige manier bieden om toegangsrechten te beheren, waarbij lesgevers eenvoudig kunnen worden toegevoegd of verwijderd.
+    \item Gebruiksvriendelijk en technisch haalbaar zijn: De oplossing moet eenvoudig te gebruiken zijn voor lesgevers met beperkte technische kennis en flexibel genoeg voor de webmaster.
+    \item Onderhoudsvriendelijk zijn: De oplossing moet eenvoudig te beheren zijn door de webmaster na de implementatie.
+\end{itemize}
+
+% Dit moet nog verder aangepast worden
+\subsubsection{Dropbox}
+Hoewel Dropbox een gebruiksvriendelijke oplossing biedt voor het delen van bestanden, voldoet het niet aan alle behoeften van AZL. 
+Het gebrek aan integratie met de bestaande systemen zorgt voor extra werk voor de beheerders, en het ontbreken van geautomatiseerd 
+toegangsbeheer maakt het moeilijk om de juiste rechten op elk tijdstip te garanderen voor alle gebruikers. Bovendien vereist Dropbox dat 
+elke gebruiker een account aanmaakt, wat een extra drempel kan vormen voor lesgevers die niet vertrouwd zijn met de dienst.
+
+Dropbox biedt via de Dropbox API de mogelijkheid om cloudopslagfunctionaliteiten, zoals bestandenbeheer en mappenbeheer, in webapplicaties te integreren \autocite{dropbox_api}. 
+De API stelt ontwikkelaars in staat om bestanden te uploaden, downloaden, mappen te creëren en bestanden te delen, wat ideaal lijkt voor het delen van 
+bestanden tussen lesgevers bij Aquarius Zwemclub Lebbeke (AZL). Echter, de meeste van deze functies vereisen het gebruik van OAuth 2.0 voor de authenticatie 
+en autorisatie van gebruikers \autocite{dropbox_oauth}.
+
+De webapplicatie voor de lesgevers bij AZL maakt geen gebruik van OAuth 2.0 voor authenticatie. Dit betekent dat, in de huidige opzet van de applicatie, 
+het technisch niet eenvoudig is om gebruikers veilig toegang te geven tot hun Dropbox-accounts zonder dat hun inloggegevens gedeeld worden. Om Dropbox te 
+integreren, zou het volledige authenticatiesysteem van de applicatie moeten worden omgebouwd om OAuth 2.0-ondersteuning toe te voegen \autocite{dropbox_oauth}. Dit houdt in dat de 
+applicatie de benodigde infrastructuur moet opzetten om gebruikers via OAuth 2.0 te authenticeren, wat een significante verandering in het huidige systeem vereist.
+
+Zonder OAuth 2.0 zou de applicatie afhankelijk moeten zijn van andere methoden om verbinding te maken met Dropbox, zoals het handmatig verstrekken van API-sleutels 
+of toegangstokens. Deze benadering is echter niet aanbevolen, omdat het in strijd is met moderne beveiligingspraktijken. Het ontbreken van OAuth 2.0 betekent 
+dat de applicatie niet de benodigde bescherming kan bieden voor gebruikersgegevens, waardoor de vertrouwelijkheid en de integriteit van opgeslagen bestanden 
+in gevaar komen.
+
+Daarnaast is de opslagcapaciteit van een gratis persoonlijk Dropbox-account beperkt tot 2 GB, wat mogelijk onvoldoende is voor de toekomstige behoeften van AZL, 
+vooral wanneer meerdere gebruikers bestanden moeten delen en opslaan. Het beheer van gebruikersmappen en het toekennen van individuele toegang tot deze 
+mappen is ook problematisch, omdat de API geen methode biedt om toegang per gebruiker te regelen zonder OAuth 2.0.
+
+Gezien de beperkingen van een gratis persoonlijk Dropbox-account, het ontbreken van OAuth 2.0-authenticatie, en de noodzaak om het gehele authenticatiesysteem 
+om te bouwen, is de integratie van Dropbox in de webapplicatie voor lesgevers technisch haalbaar, maar het vereist aanzienlijke aanpassingen aan de infrastructuur 
+en beveiligingsstructuur van de applicatie.
+
+\subsubsection{Amazon S3}
+Amazon S3 (Simple Storage Service) is een populaire cloudopslagoplossing die bekend staat om zijn schaalbaarheid, betrouwbaarheid en hoge beschikbaarheid. Het biedt objectopslag voor het opslaan van gegevens in de cloud, waarbij elk bestand (object) is opgeslagen in een zogenaamde "bucket". S3 biedt een uitgebreide set van API's die kunnen worden gebruikt om gegevens te beheren, inclusief de mogelijkheid om bestandsbeveiliging in te stellen, versiebeheer toe te passen, en gegevens te repliceren naar verschillende regio's voor redundantie \autocite{aws_s3}. Amazon S3 biedt ook integratie met andere AWS-diensten, wat het geschikt maakt voor organisaties die andere AWS-diensten gebruiken.
+
+Een belangrijk voordeel van Amazon S3 is de flexibiliteit bij het instellen van toegangscontrole via IAM (Identity and Access Management), waarmee gedetailleerde machtigingen kunnen worden ingesteld voor gebruikers en toepassingen \autocite{aws_iam}. Voor AZL zou dit het mogelijk maken om de toegang tot verschillende bestanden of mappen eenvoudig te beheren op basis van de rol van de gebruiker binnen de organisatie.
+
+Echter, de prijsstructuur van Amazon S3 kan complex zijn, afhankelijk van factoren zoals het aantal opgeslagen gegevens en het aantal verzoeken, wat kan leiden tot hogere kosten naarmate de opslagbehoeften groeien \autocite{aws_pricing}. Dit kan een belangrijke overweging zijn voor kleinere organisaties zoals AZL, die mogelijk een goedkopere oplossing nodig hebben.
+
+\subsubsection{Nextcloud}
+Nextcloud is een open-source cloudopslagoplossing die bekend staat om zijn flexibiliteit en controle over gegevens. Het biedt een privé cloudopslagplatform dat bedrijven in staat stelt om hun eigen infrastructuur te gebruiken voor het hosten van hun gegevens, in plaats van afhankelijk te zijn van externe providers. Nextcloud ondersteunt integraties met externe diensten zoals Dropbox, Google Drive en Amazon S3, en biedt uitgebreide mogelijkheden voor bestandssynchronisatie en delen \autocite{nextcloud_features}.
+
+Voor AZL zou Nextcloud de mogelijkheid bieden om de volledige controle over hun gegevens te behouden, aangezien het lokaal gehost kan worden of via een gehoste oplossing kan worden gebruikt. Het biedt ook een uitgebreid systeem voor toegangsbeheer, inclusief ondersteuning voor single sign-on (SSO) en federated cloud, waarmee bestanden veilig tussen verschillende instellingen kunnen worden gedeeld \autocite{nextcloud_sso}. Daarnaast biedt Nextcloud een API waarmee de cloudopslag eenvoudig kan worden geïntegreerd met andere applicaties, wat de interoperabiliteit met de bestaande systemen van AZL vergemakkelijkt.
+
+Een ander voordeel van Nextcloud is de mogelijkheid om de kosten te beheersen, aangezien het open-source is en zonder licentiekosten kan worden geïmplementeerd. Er kunnen echter kosten ontstaan bij het hosten van de serverinfrastructuur en het onderhouden van de software. Ook moet de juiste technische expertise aanwezig zijn om de oplossing op te zetten en te beheren.
+
+\subsubsection{Microsoft Azure}
+Microsoft Azure biedt een breed scala aan cloudopslagoplossingen, waaronder Blob Storage voor objectopslag, File Storage voor bestandsgebaseerde opslag, en Disk Storage voor virtuele machines. Azure Blob Storage biedt een schaalbare en betrouwbare oplossing voor het opslaan van grote hoeveelheden ongestructureerde data, wat het geschikt maakt voor het beheren van bestanden zoals documenten, afbeeldingen en video's \autocite{azure_blob}.
+
+Azure biedt ook uitgebreide integratiemogelijkheden, waaronder een sterk toegangsbeheer met Azure Active Directory (AD), wat het voor AZL mogelijk maakt om naadloos toegang te verlenen tot opslag op basis van gebruikersrollen en organisatorische vereisten \autocite{azure_ad}. Daarnaast maakt Azure gebruik van wereldwijde datacenters, waardoor het platform hoge beschikbaarheid en redundantie biedt.
+
+Een potentieel nadeel van Azure is de prijsstelling, die op basis van gebruik kan variëren, wat moeilijk voorspelbaar kan zijn voor kleinere organisaties zoals AZL. De complexiteit van de dienst kan ook een uitdaging zijn voor organisaties die geen uitgebreide IT-afdeling hebben \autocite{azure_pricing}.
+
+\subsubsection{Google Cloud Storage}
+Google Cloud Storage biedt schaalbare en betrouwbare opslag voor een breed scala aan gegevens, van ongestructureerde data tot back-ups en archivering. Het biedt een eenvoudig te gebruiken API voor het uploaden, downloaden en beheren van bestanden \autocite{google_storage}. Google Cloud Storage heeft ook geavanceerde beveiligingsfuncties, zoals encryptie van gegevens in rust en tijdens overdracht, en uitgebreide toegangscontrole via Google Cloud Identity and Access Management (IAM) \autocite{google_iam}.
+
+Een belangrijk voordeel van Google Cloud Storage is de sterke integratie met andere Google-diensten zoals Google Drive, Firebase en BigQuery, wat de interoperabiliteit met andere systemen vergemakkelijkt. Voor AZL zou Google Cloud Storage een gebruiksvriendelijke oplossing kunnen bieden, met robuuste beveiligingsmaatregelen en een sterke focus op prestaties.
+
+Net als bij andere grote cloudproviders, is de prijsstructuur van Google Cloud Storage complex, en de kosten kunnen oplopen naarmate de opslagbehoeften van AZL groeien \autocite{google_pricing}. De schaalvoordelen van Google kunnen echter voordelig zijn voor grotere organisaties, terwijl kleinere organisaties mogelijk baat hebben bij alternatieven zoals Nextcloud of DigitalOcean Spaces.
+
+\subsubsection{DigitalOcean Spaces}
+DigitalOcean Spaces biedt een eenvoudige en kosteneffectieve oplossing voor objectopslag in de cloud. Het is specifiek ontworpen voor ontwikkelaars en kleinere organisaties die op zoek zijn naar een flexibele en gebruiksvriendelijke oplossing voor het beheren van bestanden en gegevens \autocite{digitalocean_spaces}. DigitalOcean biedt ook een eenvoudige API en integratie met hun andere cloud-diensten, zoals databases en virtuele machines.
+
+Een voordeel van DigitalOcean Spaces is de eenvoudige prijsstelling, die transparant en voorspelbaar is, wat het geschikt maakt voor kleinere organisaties zoals AZL. Het platform is echter beperkter in functionaliteit vergeleken met grotere providers zoals AWS of Google Cloud, wat het minder geschikt maakt voor complexe of grootschalige toepassingen \autocite{digitalocean_pricing}.
+
+% einde sectie
+
 
 \begin{figure}
   \centering
@@ -34,18 +167,5 @@ Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je ve
 
 \lipsum[7-20]
 
-\begin{table}
-  \centering
-  \begin{tabular}{lcr}
-    \toprule
-    \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-    $\alpha$         & $\beta$          & $\gamma$         \\
-    \midrule
-    A                & 10.230           & a                \\
-    B                & 45.678           & b                \\
-    C                & 99.987           & c                \\
-    \bottomrule
-  \end{tabular}
-  \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
-\end{table}
+
 
