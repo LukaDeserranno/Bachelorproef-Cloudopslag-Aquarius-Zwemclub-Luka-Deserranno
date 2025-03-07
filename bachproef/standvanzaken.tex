@@ -37,17 +37,15 @@ Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschille
 
 \subsubsection{ngx-explorer}
 \texttt{ngx-explorer} is een Angular-component die uitgebreide ondersteuning biedt voor het beheren en visualiseren van bestanden in een cloudomgeving. De implementatie verloopt in enkele eenvoudige stappen:
-
-  \textbf{Installatie}: Voeg de component toe aan je project via npm:
-
+\begin{enumerate}
+  \item \textbf{Installatie}: Voeg de component toe aan je project via npm:
   \begin{listing}
     \begin{minted}{bash}
       npm install ngx-explorer
     \end{minted}
   \end{listing}
-
-  \textbf{Module-integratie}: Importeer de \texttt{NgxExplorerModule} in de hoofdmodule van je Angular-applicatie:
   
+  \item \textbf{Module-integratie}: Importeer de \texttt{NgxExplorerModule} in de hoofdmodule van je Angular-applicatie:
   \begin{listing}
     \begin{minted}{js}
       import { NgxExplorerModule } from 'ngx-explorer';
@@ -62,14 +60,14 @@ Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschille
       export class AppModule { }
     \end{minted}
   \end{listing}
-
+  
   \item \textbf{Configuratie en gebruik}: Plaats de component in je template met de tag \texttt{<ngx-explorer>}. Via inputparameters en events kun je onder andere:
-  \begin{itemize}
-    \item De startmap en toegangsrechten instellen.
-    \item Thema’s en stijlen aanpassen middels CSS-overschrijvingen.
-    \item Evenementen zoals bestandsselectie of uploadstatus monitoren.
-  \end{itemize}
-
+    \begin{itemize}
+      \item De startmap en toegangsrechten instellen.
+      \item Thema’s en stijlen aanpassen middels CSS-overschrijvingen.
+      \item Evenementen zoals bestandsselectie of uploadstatus monitoren.
+    \end{itemize}
+\end{enumerate}
 
 Wat betreft aanpasbaarheid biedt \texttt{ngx-explorer} een solide basis:
 \begin{itemize}
@@ -77,8 +75,6 @@ Wat betreft aanpasbaarheid biedt \texttt{ngx-explorer} een solide basis:
   \item De uitgebreide documentatie en actieve onderhoudsondersteuning zorgen ervoor dat ontwikkelaars snel problemen kunnen oplossen en de component kunnen uitbreiden naar specifieke behoeften.
   \item De component ondersteunt integratie met diverse cloudopslagdiensten via zowel API's als SDK's, wat een hybride integratie mogelijk maakt en de schaalbaarheid van de applicatie waarborgt.
 \end{itemize}
-
-
 
 \section{Vergelijkende analyse van cloudopslagoplossingen}
 Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende cloudoplossingen beoordeeld op basis van criteria die specifiek aansluiten bij de uitdagingen en behoeften van de organisatie:
