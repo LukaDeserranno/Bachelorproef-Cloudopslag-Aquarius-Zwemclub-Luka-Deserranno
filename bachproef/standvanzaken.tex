@@ -37,24 +37,7 @@ Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschille
 
 \subsubsubsection{ngx-explorer}
 \texttt{ngx-explorer} is een Angular-component die uitgebreide ondersteuning biedt voor het beheren en visualiseren van bestanden in een cloudomgeving. De implementatie verloopt in enkele eenvoudige stappen:
-\begin{enumerate}
-  \item \textbf{Installatie}: Voeg de component toe aan je project via npm:
-  \begin{verbatim}
-npm install ngx-explorer
-  \end{verbatim}
-  \item \textbf{Module-integratie}: Importeer de \texttt{NgxExplorerModule} in de hoofdmodule van je Angular-applicatie:
-  \begin{verbatim}
-import { NgxExplorerModule } from 'ngx-explorer';
-...
-@NgModule({
-  imports: [
-    NgxExplorerModule,
-    ...
-  ],
-  ...
-})
-export class AppModule { }
-  \end{verbatim}
+
   \item \textbf{Configuratie en gebruik}: Plaats de component in je template met de tag \texttt{<ngx-explorer>}. Via inputparameters en events kun je onder andere:
   \begin{itemize}
     \item De startmap en toegangsrechten instellen.
