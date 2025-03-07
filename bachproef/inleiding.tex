@@ -5,32 +5,51 @@
 \chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
 \label{ch:inleiding}
 
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
+Binnen sportverenigingen speelt een efficiënte digitale werking een steeds belangrijkere rol. Documenten zoals lesplanningen, presentaties en evaluaties dienen vlot gedeeld en beheerd te worden om de dagelijkse werking te ondersteunen. Bij Aquarius Zwemclub Lebbeke (AZL) wordt hiervoor momenteel gebruikgemaakt van Dropbox. Hoewel dit platform aanvankelijk voldeed aan de basisbehoeften, ondervindt AZL vandaag structurele problemen zoals verouderde toegangsrechten, het ontbreken van integratie met bestaande systemen, en beperkte toegankelijkheid voor lesgevers zonder Dropbox-account. Deze uitdagingen zorgen voor een verhoogde administratieve werklast en verhinderen een efficiënte samenwerking.
 
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+AZL beschikt over een bestaande IT-infrastructuur die onder andere bestaat uit een WordPress-website, een op maat ontwikkelde webapplicatie en hosting via DigitalOcean. De afwezigheid van een geïntegreerde en centraal beheerde cloudopslagoplossing leidt tot extra manueel werk bij het beheren van gebruikers en hun toegangsrechten. Bovendien missen lesgevers vaak de juiste middelen om zonder drempels toegang te krijgen tot de noodzakelijke documenten. 
 
-\section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
+Het doel van deze bachelorproef is om een duurzame, veilige en gebruiksvriendelijke cloudopslagoplossing te selecteren die niet alleen aansluit bij de specifieke noden van AZL, maar ook eenvoudig te integreren is met de bestaande infrastructuur. Hierbij wordt bijzondere aandacht besteed aan kostenbeheersing, schaalbaarheid en onderhoudsvriendelijkheid. Uiteindelijk wordt de gekozen oplossing geïmplementeerd in een proof of concept (PoC), waarmee getest wordt of deze effectief bijdraagt aan een vlottere werking van AZL.
+
+\section{Probleemstelling}%
 \label{sec:probleemstelling}
 
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+Aquarius Zwemclub Lebbeke is een lokale sportvereniging die afhankelijk is van digitale bestanden voor het ondersteunen van haar lessen en trainingen. Het huidige gebruik van Dropbox biedt niet langer een toekomstgerichte oplossing. Toegangsrechten worden niet automatisch bijgewerkt, integratie met bestaande toepassingen ontbreekt, en niet elke lesgever beschikt over een Dropbox-account. Dit alles leidt tot een verhoogde werkdruk voor de beheerders en zorgt ervoor dat niet alle lesgevers even eenvoudig toegang hebben tot de benodigde documenten.
 
-\section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
+Deze bachelorproef richt zich daarom exclusief op AZL en heeft als doel een cloudopslagoplossing te onderzoeken die eenvoudig te beheren is, goed integreert met de huidige infrastructuur en gebruiksvriendelijk is voor alle betrokkenen. De doelgroep bestaat uit de lesgevers en beheerders van AZL, met als belangrijkste belanghebbende de webmaster van de club die instaat voor het technisch beheer van de systemen.
+
+\section{Onderzoeksvraag}%
 \label{sec:onderzoeksvraag}
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+De centrale onderzoeksvraag van deze bachelorproef luidt:
 
-\section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
+\begin{quote}
+Welke cloudopslagoplossing biedt Aquarius Zwemclub Lebbeke de beste balans tussen gebruiksvriendelijkheid, kostenbeheersing, integratie met bestaande systemen en efficiënt gebruikersbeheer?
+\end{quote}
+
+Om deze hoofdvraag te beantwoorden, worden volgende deelvragen onderzocht:
+
+\begin{itemize}
+  \item Welke cloudopslagoplossingen zijn geschikt voor een kleine sportvereniging zoals AZL?
+  \item Wat zijn de voor- en nadelen van de verschillende beschikbare oplossingen?
+  \item Hoe kan een cloudopslagoplossing geïntegreerd worden met de bestaande systemen van AZL?
+  \item Hoe kan het toegangsbeheer efficiënt, veilig en up-to-date worden gehouden?
+  \item Wat zijn de kosten van de verschillende oplossingen en hoe verhouden deze zich tot het beschikbare budget van AZL?
+\end{itemize}
+
+\section{Onderzoeksdoelstelling}%
 \label{sec:onderzoeksdoelstelling}
 
-Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+Deze bachelorproef heeft als doel het selecteren, implementeren en evalueren van een geschikte cloudopslagoplossing voor AZL. Het einddoel is om een proof of concept (PoC) te ontwikkelen waarin de gekozen oplossing geïntegreerd wordt in de bestaande IT-omgeving van AZL. Het succes van het onderzoek wordt bepaald aan de hand van de volgende criteria:
+
+\begin{itemize}
+  \item De oplossing biedt eenvoudig beheer van gebruikers en toegangsrechten.
+  \item De oplossing integreert met de bestaande WordPress-website en webapplicatie van AZL.
+  \item Lesgevers kunnen zonder bijkomende accounts vlot toegang krijgen tot de documenten.
+  \item De oplossing blijft financieel haalbaar binnen het beperkte budget van AZL.
+\end{itemize}
+
+Het resultaat van deze bachelorproef bestaat uit een werkend prototype van de gekozen oplossing, een grondige evaluatie ervan binnen AZL en aanbevelingen voor een mogelijke volledige implementatie.
 
 \section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this bachelor thesis}}%
 \label{sec:opzet-bachelorproef}
