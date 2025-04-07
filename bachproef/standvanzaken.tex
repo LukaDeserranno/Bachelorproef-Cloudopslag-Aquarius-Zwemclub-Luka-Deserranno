@@ -65,7 +65,7 @@ Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschille
 \textbf{Configuratie en gebruik}: Plaats de component in je template met de tag \texttt{<ngx-explorer>}. Via inputparameters en events kun je onder andere:
   \begin{itemize}
     \item De startmap en toegangsrechten instellen.
-    \item Thema’s en stijlen aanpassen middels CSS-overschrijvingen.
+    \item Thema's en stijlen aanpassen middels CSS-overschrijvingen.
     \item Evenementen zoals bestandsselectie of uploadstatus monitoren.
   \end{itemize}
 
@@ -75,6 +75,170 @@ Wat betreft aanpasbaarheid biedt \texttt{ngx-explorer} een solide basis:
   \item De uitgebreide documentatie en actieve onderhoudsondersteuning zorgen ervoor dat ontwikkelaars snel problemen kunnen oplossen en de component kunnen uitbreiden naar specifieke behoeften.
   \item De component ondersteunt integratie met diverse cloudopslagdiensten via zowel API's als SDK's, wat een hybride integratie mogelijk maakt en de schaalbaarheid van de applicatie waarborgt.
 \end{itemize}
+
+\section{Frontend bestandsbeheerpakketten voor cloudopslagintegratie}
+Naast de keuze voor een cloudopslagprovider is de selectie van een gebruiksvriendelijke en flexibele frontend-component essentieel voor een succesvolle implementatie. Voor Angular-applicaties zoals die van AZL zijn er verschillende bestandsbeheerpakketten beschikbaar die directe integratie met cloudopslagdiensten mogelijk maken met minimale of geen backend-aanpassingen.
+
+\subsection{Overzicht van Angular bestandsbeheerpakketten}
+\subsubsection{ngx-explorer}
+Zoals eerder besproken biedt \texttt{ngx-explorer} een uitgebreide bestandsbeheercomponent voor Angular. Aanvullend op de eerder genoemde functionaliteiten heeft \texttt{ngx-explorer} deze specifieke voordelen voor AZL:
+
+\begin{itemize}
+  \item \textbf{Provider-agnostisch}: Werkt met verschillende opslagproviders via adapter-interfaces.
+  \item \textbf{Directe integratie}: Ondersteunt directe integratie met S3-compatibele API's (Amazon S3, DigitalOcean Spaces), Dropbox en Google Drive.
+  \item \textbf{Zelfstandige werking}: Kan worden geconfigureerd om direct met cloudopslagdiensten te communiceren zonder tussenkomst van een backend, wat de implementatie vereenvoudigt.
+\end{itemize}
+
+\subsubsection{ngx-dropzone}
+\texttt{ngx-dropzone} is een lichtgewicht, aanpasbare component voor het uploaden van bestanden naar verschillende clouddiensten \autocite{ngx_dropzone}:
+
+\begin{itemize}
+  \item \textbf{Eenvoudige implementatie}: Minimale configuratie vereist voor basisfunctionaliteit.
+  \item \textbf{Moderne UI}: Biedt een drag-and-drop interface die intuïtief is voor eindgebruikers.
+  \item \textbf{Directe uploads}: Kan worden geconfigureerd om bestanden rechtstreeks naar cloudopslag te uploaden met presigned URL's.
+\end{itemize}
+
+\begin{listing}
+  \begin{minted}{bash}
+    npm install ngx-dropzone --save
+  \end{minted}
+\end{listing}
+
+Basis implementatie in een Angular-component:
+
+\begin{listing}
+  \begin{minted}{html}
+    <ngx-dropzone (change)="onFileSelect($event)">
+      <ngx-dropzone-label>Sleep bestanden hierheen of klik om te selecteren</ngx-dropzone-label>
+      <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+      </ngx-dropzone-preview>
+    </ngx-dropzone>
+  \end{minted}
+\end{listing}
+
+\subsubsection{angular-file-manager}
+\texttt{angular-file-manager} is een uitgebreide bestandsbeheeroplossing met rijke functionaliteit \autocite{angular_file_manager}:
+
+\begin{itemize}
+  \item \textbf{Uitgebreide functionaliteit}: Biedt geavanceerde bestandsbeheeroperaties zoals verplaatsen, hernoemen, kopiëren en verwijderen.
+  \item \textbf{Multi-provider ondersteuning}: Kan worden geconfigureerd om met verschillende cloudopslagdiensten te werken via adapters.
+  \item \textbf{Responsive ontwerp}: Volledig responsive en geschikt voor zowel desktop als mobiele apparaten.
+  \item \textbf{Toegangsbeheersintegratie}: Ondersteunt rolgebaseerde toegangscontrole, wat goed aansluit bij het bestaande autorisatiesysteem van AZL.
+\end{itemize}
+
+\subsubsection{ngx-filemanager}
+\texttt{ngx-filemanager} is een moderne bestandsbeheercomponent met Firebase-integratie, maar ook aanpasbaar voor andere providers \autocite{ngx_filemanager}:
+
+\begin{itemize}
+  \item \textbf{Serverless mogelijkheden}: Kan worden gebruikt met Firebase Storage zonder eigen backend.
+  \item \textbf{Aanpasbare adapters}: Flexibel adaptermechanisme dat kan worden uitgebreid naar S3, DigitalOcean Spaces of andere providers.
+  \item \textbf{Moderne UI}: Material Design-gebaseerde interface die consistent is met moderne webapplicaties.
+  \item \textbf{Geoptimaliseerde prestaties}: Geoptimaliseerd voor het efficiënt omgaan met grote hoeveelheden bestanden.
+\end{itemize}
+
+\subsection{Cloudopslagintegratie zonder backend-aanpassingen}
+Voor AZL is een oplossing met minimale backend-aanpassingen ideaal. De volgende benaderingen maken directe frontend-integratie mogelijk:
+
+\subsubsection{Firebase Storage met AngularFire}
+Firebase Storage biedt een volledig serverless oplossing die direct vanuit de Angular-frontend kan worden gebruikt \autocite{firebase_storage}:
+
+\begin{itemize}
+  \item \textbf{Geen backend vereist}: Firebase Storage en Authentication bieden een volledige infrastructuur zonder eigen server \autocite{firebase_auth}.
+  \item \textbf{Eenvoudige implementatie}: AngularFire SDK biedt directe integratie met Angular-applicaties \autocite{angular_fire}.
+  \item \textbf{Rolgebaseerde beveiliging}: Security Rules in Firebase maken gedetailleerde toegangscontrole mogelijk die direct kan aansluiten op het bestaande rollensysteem van AZL.
+  \item \textbf{Voorspelbare kosten}: Pay-as-you-go prijsmodel met duidelijke limieten en kosten.
+\end{itemize}
+
+\begin{listing}
+  \begin{minted}{bash}
+    npm install firebase @angular/fire --save
+  \end{minted}
+\end{listing}
+
+\begin{listing}
+  \begin{minted}{typescript}
+    // Configuratie in environment.ts
+    export const environment = {
+      production: false,
+      firebase: {
+        apiKey: "...",
+        authDomain: "...",
+        projectId: "...",
+        storageBucket: "...",
+        messagingSenderId: "...",
+        appId: "..."
+      }
+    };
+  \end{minted}
+\end{listing}
+
+\subsubsection{DigitalOcean Spaces met presigned URL's}
+DigitalOcean Spaces (S3-compatibel) kan worden gebruikt met minimale backend-aanpassingen door gebruik te maken van presigned URL's \autocite{spaces_api}:
+
+\begin{itemize}
+  \item \textbf{Beperkte backend-wijzigingen}: Alleen een kleine API-endpoint voor het genereren van presigned URL's is nodig.
+  \item \textbf{Frontend-gestuurde uploads}: Bestanden worden direct van de browser naar Spaces geüpload, zonder de backend te belasten.
+  \item \textbf{Eenvoudige implementatie}: Compatibel met het bestaande hosting-platform van AZL bij DigitalOcean.
+  \item \textbf{Kosteneffectief}: DigitalOcean Spaces biedt eenvoudige, voorspelbare prijzen voor kleinere organisaties.
+\end{itemize}
+
+\subsubsection{Cloudinary voor mediabestanden}
+Specifiek voor mediabestanden (afbeeldingen, video's) biedt Cloudinary een gespecialiseerde oplossing die direct vanuit de frontend kan worden geïntegreerd \autocite{cloudinary_angular}:
+
+\begin{itemize}
+  \item \textbf{Direct upload}: Ondersteunt directe uploads vanuit de browser via client-side SDK's.
+  \item \textbf{Automatische transformaties}: Biedt automatische beeldbewerking, formaatwisseling en optimalisatie.
+  \item \textbf{Aangepaste uploadwidgets}: Vooraf gebouwde uploadcomponenten die eenvoudig in Angular kunnen worden geïntegreerd.
+  \item \textbf{Gratis tier}: Biedt een gratis tier die voldoende kan zijn voor de behoeften van een kleine sportvereniging.
+\end{itemize}
+
+\subsection{Vergelijking op basis van implementatiecomplexiteit}
+Voor de specifieke situatie van AZL is een vergelijking op basis van implementatiecomplexiteit relevant:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Oplossing} & \textbf{Frontend complexiteit} & \textbf{Backend vereisten} & \textbf{Integratietijd} \\
+\hline
+Firebase Storage & Laag & Geen & < 1 dag \\
+\hline
+DigitalOcean Spaces & Medium & Minimaal & 1-2 dagen \\
+\hline
+Cloudinary & Laag & Geen & < 1 dag \\
+\hline
+AWS S3 Direct & Hoog & Minimaal & 2-3 dagen \\
+\hline
+Dropbox API & Medium & Significant & 3-5 dagen \\
+\hline
+\end{tabular}
+\caption{Vergelijking van implementatiecomplexiteit voor verschillende cloudopslagoplossingen}
+\label{table:implementation-complexity}
+\end{table}
+
+\subsection{Integratie met bestaand authenticatiesysteem}
+Een belangrijke overweging voor AZL is hoe de cloudopslagoplossing kan worden geïntegreerd met het bestaande authenticatie- en autorisatiesysteem:
+
+\subsubsection{Firebase Auth Adapter}
+Voor Firebase-gebaseerde oplossingen kan een aangepaste auth-adapter worden gecreëerd:
+
+\begin{itemize}
+  \item \textbf{Custom tokens}: De Node.js-backend kan Firebase custom tokens genereren op basis van AZL's bestaande authenticatie.
+  \item \textbf{Rolsynchronisatie}: Automatische synchronisatie van rollen tussen het bestaande systeem en Firebase.
+  \item \textbf{Transparante integratie}: Voor eindgebruikers blijft het inlogproces hetzelfde, terwijl de cloudopslag naadloos wordt geïntegreerd.
+\end{itemize}
+
+\subsubsection{Tokengebaseerde autorisatie voor S3/Spaces}
+Voor S3-compatibele oplossingen zoals DigitalOcean Spaces:
+
+\begin{itemize}
+  \item \textbf{JWT-autorisatie}: Bestaande JWT-tokens kunnen worden gebruikt om presigned URL's te genereren met de juiste machtigingen \autocite{jwt_auth}.
+  \item \textbf{Rolgebaseerde paden}: Bestanden kunnen worden georganiseerd in een mapstructuur die overeenkomt met de rollen in het systeem.
+  \item \textbf{Tijdelijk toegang}: Presigned URL's bieden tijdelijke toegang met precieze machtigingen, wat de beveiliging verbetert.
+\end{itemize}
+
+Deze aanpak biedt een balans tussen implementatiegemak en integratie met het bestaande systeem, wat de totale implementatietijd en -kosten minimaliseert terwijl de gebruikerservaring wordt geoptimaliseerd.
 
 \section{Vergelijkende analyse van cloudopslagoplossingen}
 Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende cloudoplossingen beoordeeld op basis van criteria die specifiek aansluiten bij de uitdagingen en behoeften van de organisatie:
