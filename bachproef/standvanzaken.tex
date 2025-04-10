@@ -43,22 +43,21 @@ Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende clo
 \end{itemize}
 
 \subsection{S3-Compatibele Object Storage}
-Amazon S3 (Simple Storage Service), geïntroduceerd door AWS, was een van de eerste en meest invloedrijke object storage diensten op de markt \cite{S3CompatAngularIntro}. % Vervang S3CompatAngularIntro door je BibTeX key
-De bijbehorende Application Programming Interface (API) is door zijn robuustheid, schaalbaarheid en vroege adoptie uitgegroeid tot een \textit{de facto} standaard binnen de cloud storage industrie \cite{S3CompatAngularStandard}. % Vervang S3CompatAngularStandard door je BibTeX key
-Dit heeft aanzienlijke voordelen voor ontwikkelaars en organisaties:
 
+S3-compatibele cloudopslag biedt verschillende technische voordelen voor Angular-webapplicaties op het vlak van prestaties, beveiliging, integratie en kostenefficiëntie. Zo tonen Jamal et al.~\cite{Jamal2021Performance} aan dat S3-opslag goede prestaties levert qua snelheid, lage netwerklast genereert, en kostenbesparend is ten opzichte van alternatieve systemen. Hierdoor kunnen Angular-applicaties efficiënt bestanden verwerken in real time.
+
+Op het gebied van prestaties wijzen Liang en Kozat~\cite{Liang2014FAST} op aanzienlijke dalingen in latentiepercentielen (76\%, 80\% en 85\% bij 2~MB-bestanden) dankzij het gebruik van erasure coding gecombineerd met parallelle verbindingen. Dit resulteert in een merkbare verhoging van de efficiëntie.
+
+Beveiligingsaspecten worden versterkt door systemen zoals FADE. Tang et al.~\cite{Tang2010FADE, Tang2012Secure} illustreren hoe gegarandeerde bestandsverwijdering en fijnmazige toegangscontrole kunnen worden geïmplementeerd met minimale impact op prestaties en kosten. Bovendien komen S3-oplossingen tegemoet aan compliancevereisten. Колпаков en Петренко~\cite{kolpakov2018data} beschrijven methoden voor integratie die voldoen aan normen zoals PCI DSS, HIPAA/HITECH en FEDRAMP.
+
+Tot slot ondersteunen S3-oplossingen diverse integratiemethoden—zoals directe API-aanroepen, proxyservers en overlaymechanismen—waardoor ontwikkelaars de flexibiliteit hebben om opslagfunctionaliteit te integreren zonder de Angular-businesslogica te belasten.
+
+\textbf{Samengevat zijn de voornaamste technische voordelen:}
 \begin{itemize}
-    \item \textbf{Ecosysteem \& Tooling:} Er is een breed ecosysteem ontstaan rondom de S3 API \cite{S3CompatAngularEcosystem}. % Vervang S3CompatAngularEcosystem door je BibTeX key
-    Ontwikkelaars kunnen gebruikmaken van uitgebreide Software Development Kits (SDK's) voor diverse programmeertalen (zoals JavaScript voor Angular/Node.js) \cite{S3CompatAngularSDKs}, % Vervang S3CompatAngularSDKs door je BibTeX key
-    talloze libraries, en command-line tools die S3 ondersteunen.
-    \item \textbf{Kennis \& Overdraagbaarheid:} Investering in kennis over het werken met de S3 API is duurzaam, omdat deze kennis vaak direct toepasbaar is bij andere providers die de S3 API ondersteunen \cite{S3CompatAngularKnowledgeTransfer}. % Vervang S3CompatAngularKnowledgeTransfer door je BibTeX key
-    \item \textbf{Concurrentie \& Keuzevrijheid:} Diverse andere cloud providers bieden object storage diensten aan die compatibel zijn met de S3 API \cite{S3CompatAngularOtherProviders}. % Vervang S3CompatAngularOtherProviders door je BibTeX key
-    Deze S3-compatibele oplossingen, zoals DigitalOcean Spaces \cite{BPVoorstelDOSpaces} % Vervang BPVoorstelDOSpaces door je BibTeX key
-    dat ook in dit onderzoek wordt bekeken, concurreren vaak op basis van prijs (bijvoorbeeld eenvoudigere kostenmodellen \cite{S3CompatAngularPricing} % Vervang S3CompatAngularPricing door je BibTeX key
-    of lagere kosten voor dataverkeer), gebruiksgemak, of specifieke features, terwijl ze toch de voordelen van de gestandaardiseerde S3 API bieden.
+    \item Verbeterde prestaties met lagere latentie en gunstige kostenefficiëntie.
+    \item Verhoogde beveiliging door gegarandeerde verwijdering, encryptie en toegangscontrole.
+    \item Flexibele integratiemethoden die de complexiteit van S3 abstraheren van de Angular-logica.
 \end{itemize}
-
-Voor AZL betekent dit dat kiezen voor een oplossing die de S3 API gebruikt (ofwel AWS S3 zelf, of een compatibele aanbieder) een goede basis legt voor integratie met de bestaande Angular/Node.js applicatie, dankzij de beschikbare tools en SDK's. Hieronder analyseren we eerst AWS S3 en vervolgens een representatief S3-compatibel alternatief (DigitalOcean Spaces) aan de hand van de gestelde criteria.
 
 \subsubsection{Amazon S3}
 \subsubsection{DigitalOcean}
