@@ -32,26 +32,6 @@ Bij het integreren van cloudopslag in webapplicaties is de architectuur een cruc
   \item \textbf{Hybride integratie}: Combinatie van API's en SDK's voor optimale flexibiliteit.
 \end{itemize}
 
-\subsection{Frontend frameworks voor bestandsbeheer}
-Voor de interactie en visualisatie van de cloudopslag in Angular zijn verschillende UI-frameworks beschikbaar. Dit maakt het ontwikkelen minder complex daar er al een component voor bestaat.
-
-\subsubsection{ngx-explorer}
-\texttt{ngx-explorer} is een Angular-component die uitgebreide ondersteuning biedt voor het beheren en visualiseren van bestanden in een cloudomgeving. De implementatie verloopt in enkele eenvoudige stappen:
-  
-\textbf{Configuratie en gebruik}: Plaats de component in je template met de tag \texttt{<ngx-explorer>}. Via inputparameters en events kun je onder andere:
-  \begin{itemize}
-    \item De startmap en toegangsrechten instellen.
-    \item Thema’s en stijlen aanpassen middels CSS-overschrijvingen.
-    \item Evenementen zoals bestandsselectie of uploadstatus monitoren.
-  \end{itemize}
-
-Wat betreft aanpasbaarheid biedt \texttt{ngx-explorer} een solide basis:
-\begin{itemize}
-  \item De standaard UI heeft een gemiddelde flexibiliteit, maar door gebruik te maken van Angular's component-architectuur en uitgebreide CSS-opties is het relatief eenvoudig om de look en feel aan te passen.
-  \item De uitgebreide documentatie en actieve onderhoudsondersteuning zorgen ervoor dat ontwikkelaars snel problemen kunnen oplossen en de component kunnen uitbreiden naar specifieke behoeften.
-  \item De component ondersteunt integratie met diverse cloudopslagdiensten via zowel API's als SDK's, wat een hybride integratie mogelijk maakt en de schaalbaarheid van de applicatie waarborgt.
-\end{itemize}
-
 \section{Vergelijkende analyse van cloudopslagoplossingen}
 Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende cloudoplossingen beoordeeld op basis van criteria die specifiek aansluiten bij de uitdagingen en behoeften van de organisatie:
 \begin{itemize}
@@ -61,3 +41,28 @@ Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende clo
     \item Gebruiksvriendelijk en technisch haalbaar zijn: De oplossing moet eenvoudig te gebruiken zijn voor lesgevers met beperkte technische kennis en flexibel genoeg voor de webmaster.
     \item Onderhoudsvriendelijk zijn: De oplossing moet eenvoudig te beheren zijn door de webmaster na de implementatie.
 \end{itemize}
+
+\subsection{S3-Compatibele Object Storage}
+Amazon S3 (Simple Storage Service), geïntroduceerd door AWS, was een van de eerste en meest invloedrijke object storage diensten op de markt \cite{S3CompatAngularIntro}. % Vervang S3CompatAngularIntro door je BibTeX key
+De bijbehorende Application Programming Interface (API) is door zijn robuustheid, schaalbaarheid en vroege adoptie uitgegroeid tot een \textit{de facto} standaard binnen de cloud storage industrie \cite{S3CompatAngularStandard}. % Vervang S3CompatAngularStandard door je BibTeX key
+Dit heeft aanzienlijke voordelen voor ontwikkelaars en organisaties:
+
+\begin{itemize}
+    \item \textbf{Ecosysteem \& Tooling:} Er is een breed ecosysteem ontstaan rondom de S3 API \cite{S3CompatAngularEcosystem}. % Vervang S3CompatAngularEcosystem door je BibTeX key
+    Ontwikkelaars kunnen gebruikmaken van uitgebreide Software Development Kits (SDK's) voor diverse programmeertalen (zoals JavaScript voor Angular/Node.js) \cite{S3CompatAngularSDKs}, % Vervang S3CompatAngularSDKs door je BibTeX key
+    talloze libraries, en command-line tools die S3 ondersteunen.
+    \item \textbf{Kennis \& Overdraagbaarheid:} Investering in kennis over het werken met de S3 API is duurzaam, omdat deze kennis vaak direct toepasbaar is bij andere providers die de S3 API ondersteunen \cite{S3CompatAngularKnowledgeTransfer}. % Vervang S3CompatAngularKnowledgeTransfer door je BibTeX key
+    \item \textbf{Concurrentie \& Keuzevrijheid:} Diverse andere cloud providers bieden object storage diensten aan die compatibel zijn met de S3 API \cite{S3CompatAngularOtherProviders}. % Vervang S3CompatAngularOtherProviders door je BibTeX key
+    Deze S3-compatibele oplossingen, zoals DigitalOcean Spaces \cite{BPVoorstelDOSpaces} % Vervang BPVoorstelDOSpaces door je BibTeX key
+    dat ook in dit onderzoek wordt bekeken, concurreren vaak op basis van prijs (bijvoorbeeld eenvoudigere kostenmodellen \cite{S3CompatAngularPricing} % Vervang S3CompatAngularPricing door je BibTeX key
+    of lagere kosten voor dataverkeer), gebruiksgemak, of specifieke features, terwijl ze toch de voordelen van de gestandaardiseerde S3 API bieden.
+\end{itemize}
+
+Voor AZL betekent dit dat kiezen voor een oplossing die de S3 API gebruikt (ofwel AWS S3 zelf, of een compatibele aanbieder) een goede basis legt voor integratie met de bestaande Angular/Node.js applicatie, dankzij de beschikbare tools en SDK's. Hieronder analyseren we eerst AWS S3 en vervolgens een representatief S3-compatibel alternatief (DigitalOcean Spaces) aan de hand van de gestelde criteria.
+
+\subsubsection{Amazon S3}
+\subsubsection{DigitalOcean}
+
+
+
+
