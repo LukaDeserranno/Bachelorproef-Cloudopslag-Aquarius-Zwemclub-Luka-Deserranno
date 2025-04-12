@@ -358,21 +358,21 @@ Bij directe cloudintegratie zijn er belangrijke beveiligingsaspecten:
 \subsection{Vergelijking van cloudopslagdienst-integratie}
 
 \begin{table}
-\centering
-\begin{tabular}{lcr}
-\toprule
-\textbf{Cloudopslagdienst} & \textbf{Integratie} & \textbf{Aanbevolen package} & \textbf{Beperkingen} \\
-\midrule
-Amazon S3 & Hoog (presigned URLs, STS) & \texttt{aws-sdk} & Complexere configuratie \\
-DigitalOcean Spaces & Hoog (S3-compatibel) & \texttt{aws-sdk} + custom endpoint & Beperkte functieset \\
-Nextcloud & Middel (WebDAV) & \texttt{nextcloud-client} & Vereist eigen implementatie \\
-Microsoft Azure & Hoog (SAS tokens) & \texttt{@azure/storage-blob} & Eenvoudige setup \\
-Google Cloud Storage & Hoog (signed URLs) & \texttt{@google-cloud/storage} & Veel mogelijkheden \\
-\bottomrule
-\end{tabular}
-\caption[Vergelijking cloudintegraties]{Vergelijking van integratiemethoden voor cloudopslagdiensten.}
-\label{tab:cloud-vergelijking}
-\end{table}
+    \centering
+    \begin{tabular}{lcr}
+      \toprule
+      \textbf{Cloudopslagdienst} & \textbf{Integratie en package} & \textbf{Beperkingen} \\
+      $\alpha$ & $\beta$ & $\gamma$ \\
+      \midrule
+      Amazon S3 & Hoog (presigned URLs, STS) – \texttt{aws-sdk} & Complexere configuratie \\
+      DigitalOcean Spaces & Hoog (S3-compatibel) – \texttt{aws-sdk} + custom endpoint & Beperkte functieset \\
+      Nextcloud & Middel (WebDAV) – \texttt{nextcloud-client} & Vereist eigen implementatie \\
+      Microsoft Azure & Hoog (SAS tokens) – \texttt{@azure/storage-blob} & Eenvoudige setup \\
+      Google Cloud Storage & Hoog (signed URLs) – \texttt{@google-cloud/storage} & Veel mogelijkheden \\
+      \bottomrule
+    \end{tabular}
+    \caption[Vergelijking cloudintegraties]{\label{tab:cloud-vergelijking}Vergelijking van integratiemethoden voor cloudopslagdiensten.}
+ \end{table}
 
 \subsection{Conclusie}
 
