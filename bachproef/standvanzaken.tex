@@ -103,7 +103,20 @@ Tenslotte is S3 kosteneffectief voor kleine organisaties zoals AZL dankzij het \
 
 Amazon S3 sluit hierdoor nauw aan bij de eisen van AZL: veilige en flexibele opslag, eenvoudige integratie in de bestaande infrastructuur, gedetailleerd toegangsbeheer en een schaalbaar kostenmodel.
 
-\subsubsection{DigitalOcean}
+\subsubsection{DigitalOcean Spaces}
+DigitalOcean Spaces is een objectopslagdienst die zich richt op eenvoud, schaalbaarheid en betaalbaarheid. De dienst is S3-compatibel en biedt daarmee een vertrouwde interface voor ontwikkelaars die reeds ervaring hebben met Amazon Web Services. Spaces ondersteunt het opslaan van ongestructureerde data zoals afbeeldingen, video's, back-ups en statische webbestanden, wat het uitermate geschikt maakt voor organisaties zoals AZL die veelvuldig met media- en documentbestanden werken~\cite{do_product}.
+
+Een belangrijk voordeel van DigitalOcean Spaces is het voorspelbare prijsmodel. Voor $5 per maand krijgt men 250~GiB aan opslag en 1~TiB aan uitgaand dataverkeer~\cite{do_pricing}. In tegenstelling tot Amazon S3 worden er geen extra kosten aangerekend voor API-verzoeken, wat voordelig is voor webapplicaties met veel interactie tussen frontend en opslag. Ook is er een ingebouwd Content Delivery Network (CDN) inbegrepen, dat statische content versneld kan leveren aan gebruikers wereldwijd~\cite{do_features}.
+
+De integratie met een Angular frontend en Node.js backend is technisch haalbaar dankzij de S3-compatibele API. Via de AWS SDK voor JavaScript kunnen CRUD-operaties worden uitgevoerd op objecten in Spaces~\cite{do_sdk}. Voor AZL kan dit betekenen dat uploads en downloads veilig verlopen via pre-signed URLs, gegenereerd door de backend, zonder dat gevoelige sleutels op de client worden blootgesteld~\cite{do_security}. De frontend kan daarnaast direct publieke assets serveren, bijvoorbeeld afbeeldingen of documenten, met behulp van de CDN-url's.
+
+Een bijkomend voordeel is dat AZL hun webapplicatie reeds host op DigitalOcean, waardoor dataoverdracht binnen het ecosysteem snel en zonder extra kosten kan verlopen~\cite{do_latency}. Dit verlaagt de netwerklatentie en vereenvoudigt facturatie, omdat infrastructuur- en opslagkosten gecentraliseerd zijn.
+
+Spaces biedt toegangsbeheer via per-bucket toegangssleutels en bucket policies. Elk object kan publiek of privé worden ingesteld. Daarnaast ondersteunt DigitalOcean de AWS Signature v4 authenticatiemethode, waarmee veilige API-verzoeken kunnen worden gedaan~\cite{do_accesskeys}. Encryptie wordt zowel tijdens transport als bij opslag toegepast, conform industriestandaarden~\cite{do_security_model}.
+
+Tot slot is Spaces gebruiksvriendelijk voor zowel technische als niet-technische gebruikers. Het DigitalOcean Controlepaneel biedt drag-and-drop functionaliteit voor bestandbeheer, terwijl geavanceerde taken mogelijk zijn via CLI-tools zoals s3cmd of de AWS CLI~\cite{do_ui}. Dit maakt het beheer toegankelijk voor lesgevers en vrijwilligers van AZL die minder technische ervaring hebben.
+
+Gezien de eenvoudige integratie, het transparante kostenmodel en de S3-compatibiliteit vormt DigitalOcean Spaces een sterke kandidaat als cloudopslagoplossing voor AZL. Het is met name aantrekkelijk voor kleine tot middelgrote organisaties die streven naar een evenwicht tussen functionaliteit, veiligheid en budgetbeheer.
 
 
 \subsection{Nextcloud}
