@@ -89,6 +89,19 @@ Tot slot ondersteunen S3-oplossingen diverse integratiemethoden—zoals directe 
 \end{itemize}
 
 \subsubsection{Amazon S3}
+Amazon Simple Storage Service (S3) is een schaalbare objectopslagdienst van Amazon Web Services (AWS) die geschikt is voor toepassingen met uiteenlopende opslagbehoeften. Voor AZL vormt S3 een mogelijk alternatief voor Dropbox, mede dankzij zijn flexibiliteit, veiligheid en integratiemogelijkheden met webapplicaties zoals de bestaande Angular frontend en Node.js backend.
+
+S3 slaat gegevens op in \textit{buckets}, waarin objecten – bestaande uit data en metadata – uniek geïdentificeerd worden via sleutels. Deze structuur laat toe om een logische mappenhiërarchie te simuleren door gebruik van voorvoegsels, zonder gebonden te zijn aan de beperkingen van traditionele bestandssystemen~\cite{aws_docs_structuur}. Daarnaast biedt S3 via een RESTful API directe integratie met webapplicaties, ondersteund door SDK's en tools zoals AWS Amplify~\cite{aws_docs_amplify}.
+
+Voor AZL is vooral de ondersteuning voor \textit{pre-signed URLs} relevant. Deze maken veilige frontend uploads mogelijk zonder dat AWS-credentials in de clientcode moeten worden opgenomen~\cite{aws_presigned}. De backend (Node.js) kan instaan voor het genereren van deze tijdelijke links, waarmee de Angular frontend rechtstreeks bestanden kan opslaan of ophalen.
+
+Qua schaalbaarheid en betrouwbaarheid biedt Amazon S3 sterke garanties: een beschikbaarheid van 99,99\% en een duurzaamheid van 99,999999999\%~\cite{aws_availability}. Bovendien kunnen verschillende opslagklassen worden gebruikt afhankelijk van de toegangspatronen, gaande van S3 Standard voor frequente toegang tot Glacier Deep Archive voor langetermijnarchivering~\cite{aws_classes}.
+
+Toegangsbeheer wordt in S3 geregeld via \textit{IAM policies}, \textit{bucket policies} en optioneel \textit{access points}. Deze mechanismen maken fijnmazige controle mogelijk over wie welke bestanden mag lezen, schrijven of verwijderen, wat toelaat om rolgebaseerde toegang toe te passen voor lesgevers en beheerders~\cite{aws_accesscontrol}.
+
+Tenslotte is S3 kosteneffectief voor kleine organisaties zoals AZL dankzij het \textit{pay-as-you-go} prijsmodel. Er wordt enkel betaald voor wat effectief wordt opgeslagen en verbruikt, met bijkomende mogelijkheden om via lifecycle policies automatisch minder gebruikte data naar goedkopere opslagklassen te verplaatsen~\cite{aws_costs}.
+
+Amazon S3 sluit hierdoor nauw aan bij de eisen van AZL: veilige en flexibele opslag, eenvoudige integratie in de bestaande infrastructuur, gedetailleerd toegangsbeheer en een schaalbaar kostenmodel.
 
 \subsubsection{DigitalOcean}
 
