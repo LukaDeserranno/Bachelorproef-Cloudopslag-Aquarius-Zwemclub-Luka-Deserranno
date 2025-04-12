@@ -184,7 +184,7 @@ Voor directe communicatie tussen de Angular-applicatie en cloudopslagdiensten is
 
 \texttt{ng-file-upload} is een veelzijdige Angular-package voor bestandsupload-functionaliteit.
 
-\begin{lstlisting}[language=TypeScript, caption=Integratie van ng-file-upload]
+\begin{verbatim}[language=TypeScript, caption=Integratie van ng-file-upload]
 import { FileUploadModule } from 'ng-file-upload';
 
 @NgModule({
@@ -193,7 +193,7 @@ import { FileUploadModule } from 'ng-file-upload';
   ]
 })
 export class AppModule { }
-\end{lstlisting}
+\end{verbatim}
 
 Deze component ondersteunt drag-and-drop, voortgangsweergave, en meerdere bestandselecties. De integratie met cloudopslagdiensten verloopt via service-wrappers.
 
@@ -201,7 +201,7 @@ Deze component ondersteunt drag-and-drop, voortgangsweergave, en meerdere bestan
 
 \texttt{ngx-dropzone} biedt een gebruiksvriendelijke drag-and-drop interface met uitstekende responsieve weergave:
 
-\begin{lstlisting}[language=TypeScript, caption=Integratie van ngx-dropzone]
+\begin{verbatim}[language=TypeScript, caption=Integratie van ngx-dropzone]
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 @NgModule({
@@ -210,7 +210,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
   ]
 })
 export class AppModule { }
-\end{lstlisting}
+\end{verbatim}
 
 Deze component ondersteunt bestandspreview, validatie, en aangepaste styling, en kan gecombineerd worden met cloudspecifieke services.
 
@@ -218,7 +218,7 @@ Deze component ondersteunt bestandspreview, validatie, en aangepaste styling, en
 
 Voor applicaties die Angular Material gebruiken, is een geïntegreerde bestandsinput component beschikbaar:
 
-\begin{lstlisting}[language=TypeScript, caption=Integratie van Angular Material File Input]
+\begin{verbatim}[language=TypeScript, caption=Integratie van Angular Material File Input]
 import { MatFileInputModule } from '@angular/material-components/file-input';
 
 @NgModule({
@@ -227,7 +227,7 @@ import { MatFileInputModule } from '@angular/material-components/file-input';
   ]
 })
 export class AppModule { }
-\end{lstlisting}
+\end{verbatim}
 
 Deze component biedt consistente styling binnen het Material-design en kan worden uitgebreid met cloudopslag-integratie.
 
@@ -235,7 +235,7 @@ Deze component biedt consistente styling binnen het Material-design en kan worde
 
 Voor directe integratie met Amazon S3:
 
-\begin{lstlisting}[language=TypeScript, caption=AWS SDK voor directe S3-integratie]
+\begin{verbatim}[language=TypeScript, caption=AWS SDK voor directe S3-integratie]
 import { S3 } from 'aws-sdk';
 
 export class S3UploadService {
@@ -256,13 +256,13 @@ export class S3UploadService {
     // Implementatie voor directe upload
   }
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{@azure/storage-blob}
 
 Voor Microsoft Azure Blob Storage integratie:
 
-\begin{lstlisting}[language=TypeScript, caption=Azure Storage Blob integratie]
+\begin{verbatim}[language=TypeScript, caption=Azure Storage Blob integratie]
 import { BlobServiceClient } from '@azure/storage-blob';
 
 export class AzureStorageService {
@@ -276,7 +276,7 @@ export class AzureStorageService {
   
   // Upload methodes
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{Bestandsverkenner componenten}
 
@@ -296,14 +296,14 @@ Om de verschillende cloudopslagdiensten zonder uitgebreide backend te integreren
     \item \textbf{Een abstracte service laag te implementeren:}
 \end{enumerate}
 
-\begin{lstlisting}[language=TypeScript, caption=Abstracte cloudstorage service]
+\begin{verbatim}[language=TypeScript, caption=Abstracte cloudstorage service]
 export abstract class CloudStorageService {
   abstract uploadFile(file: File, path: string): Observable<string>;
   abstract downloadFile(path: string): Observable<Blob>;
   abstract listFiles(directory: string): Observable<FileItem[]>;
   abstract deleteFile(path: string): Observable<boolean>;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \begin{enumerate}
 \setcounter{enumi}{1}
@@ -312,7 +312,7 @@ export abstract class CloudStorageService {
     \item \textbf{Gedeelde UI-componenten ontwerpen} die werken met de abstracte service:
 \end{enumerate}
 
-\begin{lstlisting}[language=TypeScript, caption=Herbruikbare cloud uploader component]
+\begin{verbatim}[language=TypeScript, caption=Herbruikbare cloud uploader component]
 @Component({
   selector: 'app-cloud-uploader',
   template: `
@@ -329,7 +329,7 @@ export class CloudUploaderComponent {
   @Input() storageService: CloudStorageService;
   // Implementatie
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsection{Beveiligingsoverwegingen}
 
