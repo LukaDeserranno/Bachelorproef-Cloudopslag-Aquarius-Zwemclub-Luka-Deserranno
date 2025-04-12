@@ -141,4 +141,230 @@ Een belangrijk voordeel van Google Cloud Storage is de sterke integratie met and
 Net als bij andere grote cloudproviders, is de prijsstructuur van Google Cloud Storage complex, en de kosten kunnen oplopen naarmate de opslagbehoeften van AZL groeien \autocite{google_pricing}. De schaalvoordelen van Google kunnen echter voordelig zijn voor grotere organisaties, terwijl kleinere organisaties mogelijk baat hebben bij alternatieven zoals Nextcloud of DigitalOcean Spaces.
 
 
+\section{UI-componenten voor cloudopslagintegratie in Angular-webapplicaties}
 
+De integratie van cloudopslagdiensten zoals Amazon S3, DigitalOcean Spaces, Nextcloud, Microsoft Azure en Google Cloud Storage in Angular-webapplicaties vereist zorgvuldige overweging van de benodigde UI-componenten. Deze componenten moeten directe interactie met de clouddiensten mogelijk maken zonder uitgebreide backend-aanpassingen. In deze sectie analyseren we de beschikbare UI-componenten, packages en implementatiemethoden die deze directe integratie mogelijk maken.
+
+\subsection{Clientzijdige integratiemethoden}
+
+Voor directe integratie van cloudopslagdiensten zonder afhankelijkheid van backend-aanpassingen bestaan er meerdere benaderingen:
+
+\subsubsection{Directe API-integratie met STS/Presigned URLs}
+
+Een effectieve methode voor directe cloudopslagintegratie is het gebruik van beveiligde tijdelijke credentials of vooraf ondertekende URLs. Deze aanpak minimaliseert de backend-vereisten.
+
+\textbf{Benodigde UI-componenten:}
+\begin{itemize}
+    \item Upload- en downloadcomponenten die met presigned URLs kunnen werken
+    \item Bestandsselectie- en voortgangsweergave
+    \item Bestandsbeheersysteem met mappenhiërarchie
+\end{itemize}
+
+\textbf{Voordelen:}
+\begin{itemize}
+    \item Minimale backend-vereisten
+    \item Verbeterde schaalbaarheid
+    \item Verminderde serverbelasting
+\end{itemize}
+
+\textbf{Nadelen:}
+\begin{itemize}
+    \item Complexere clientzijdige authenticatie
+    \item Tijdelijke credentials vereisen vervangingslogica
+    \item Beperkte bewerkingsmogelijkheden zonder backend
+\end{itemize}
+
+\subsubsection{Cross-Origin Resource Sharing (CORS) configuratie}
+
+Voor directe communicatie tussen de Angular-applicatie en cloudopslagdiensten is correcte CORS-configuratie essentieel. De CORS-instellingen moeten worden geconfigureerd op de cloudopslagdienst om HTTP-verzoeken van de oorsprong van de Angular-applicatie toe te staan.
+
+\subsection{Aanbevolen Angular UI-componenten en packages}
+
+\subsubsection{ng-file-upload}
+
+\texttt{ng-file-upload} is een veelzijdige Angular-package voor bestandsupload-functionaliteit.
+
+\begin{lstlisting}[language=TypeScript, caption=Integratie van ng-file-upload]
+import { FileUploadModule } from 'ng-file-upload';
+
+@NgModule({
+  imports: [
+    FileUploadModule
+  ]
+})
+export class AppModule { }
+\end{lstlisting}
+
+Deze component ondersteunt drag-and-drop, voortgangsweergave, en meerdere bestandselecties. De integratie met cloudopslagdiensten verloopt via service-wrappers.
+
+\subsubsection{ngx-dropzone}
+
+\texttt{ngx-dropzone} biedt een gebruiksvriendelijke drag-and-drop interface met uitstekende responsieve weergave:
+
+\begin{lstlisting}[language=TypeScript, caption=Integratie van ngx-dropzone]
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
+@NgModule({
+  imports: [
+    NgxDropzoneModule
+  ]
+})
+export class AppModule { }
+\end{lstlisting}
+
+Deze component ondersteunt bestandspreview, validatie, en aangepaste styling, en kan gecombineerd worden met cloudspecifieke services.
+
+\subsubsection{Angular Material File Input}
+
+Voor applicaties die Angular Material gebruiken, is een geïntegreerde bestandsinput component beschikbaar:
+
+\begin{lstlisting}[language=TypeScript, caption=Integratie van Angular Material File Input]
+import { MatFileInputModule } from '@angular/material-components/file-input';
+
+@NgModule({
+  imports: [
+    MatFileInputModule
+  ]
+})
+export class AppModule { }
+\end{lstlisting}
+
+Deze component biedt consistente styling binnen het Material-design en kan worden uitgebreid met cloudopslag-integratie.
+
+\subsubsection{AWS SDK voor Javascript/Angular}
+
+Voor directe integratie met Amazon S3:
+
+\begin{lstlisting}[language=TypeScript, caption=AWS SDK voor directe S3-integratie]
+import { S3 } from 'aws-sdk';
+
+export class S3UploadService {
+  private s3: S3;
+  
+  constructor() {
+    this.s3 = new S3({
+      region: 'your-region',
+      credentials: {
+        accessKeyId: 'temporary-access-key',
+        secretAccessKey: 'temporary-secret-key',
+        sessionToken: 'temporary-session-token'
+      }
+    });
+  }
+  
+  uploadFile(file: File, bucket: string, key: string): Observable<any> {
+    // Implementatie voor directe upload
+  }
+}
+\end{lstlisting}
+
+\subsubsection{@azure/storage-blob}
+
+Voor Microsoft Azure Blob Storage integratie:
+
+\begin{lstlisting}[language=TypeScript, caption=Azure Storage Blob integratie]
+import { BlobServiceClient } from '@azure/storage-blob';
+
+export class AzureStorageService {
+  private blobServiceClient: BlobServiceClient;
+  
+  constructor() {
+    this.blobServiceClient = new BlobServiceClient(
+      `https://accountname.blob.core.windows.net/sasToken`
+    );
+  }
+  
+  // Upload methodes
+}
+\end{lstlisting}
+
+\subsubsection{Bestandsverkenner componenten}
+
+Voor het beheren van bestanden is een bestandsverkenner interface essentieel:
+
+\textbf{Aanbevolen packages:}
+\begin{itemize}
+    \item \texttt{ngx-file-manager}: Biedt een volledig bestandsbeheersysteem met ondersteuning voor meerdere cloudproviders
+    \item \texttt{angular-filemanager}: Aanpasbare component met CRUD-operaties voor cloudbestanden
+\end{itemize}
+
+\subsection{Integratiestrategie zonder backend-aanpassingen}
+
+Om de verschillende cloudopslagdiensten zonder uitgebreide backend te integreren, is het aan te raden om:
+
+\begin{enumerate}
+    \item \textbf{Een abstracte service laag te implementeren:}
+\end{enumerate}
+
+\begin{lstlisting}[language=TypeScript, caption=Abstracte cloudstorage service]
+export abstract class CloudStorageService {
+  abstract uploadFile(file: File, path: string): Observable<string>;
+  abstract downloadFile(path: string): Observable<Blob>;
+  abstract listFiles(directory: string): Observable<FileItem[]>;
+  abstract deleteFile(path: string): Observable<boolean>;
+}
+\end{lstlisting}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+    \item \textbf{Provider-specifieke implementaties} voor elke clouddienst maken die deze interface implementeren
+    \item \textbf{Een factory pattern gebruiken} om de juiste service te instantiëren gebaseerd op de configuratie
+    \item \textbf{Gedeelde UI-componenten ontwerpen} die werken met de abstracte service:
+\end{enumerate}
+
+\begin{lstlisting}[language=TypeScript, caption=Herbruikbare cloud uploader component]
+@Component({
+  selector: 'app-cloud-uploader',
+  template: `
+    <ngx-dropzone (change)="onFileSelect($event)">
+      <ngx-dropzone-label>Sleep bestanden hierheen</ngx-dropzone-label>
+      <ngx-dropzone-preview *ngFor="let file of files" [removable]="true" (removed)="onRemove(file)">
+        <ngx-dropzone-label>{{ file.name }}</ngx-dropzone-label>
+      </ngx-dropzone-preview>
+    </ngx-dropzone>
+    <mat-progress-bar *ngIf="uploading" [value]="uploadProgress"></mat-progress-bar>
+  `
+})
+export class CloudUploaderComponent {
+  @Input() storageService: CloudStorageService;
+  // Implementatie
+}
+\end{lstlisting}
+
+\subsection{Beveiligingsoverwegingen}
+
+Bij directe cloudintegratie zijn er belangrijke beveiligingsaspecten:
+
+\begin{enumerate}
+    \item \textbf{Tijdelijke credentials:} Gebruik korte-termijn tokens via een minimale backend-service
+    \item \textbf{Bestandsvalidatie:} Implementeer clientzijdige validatie voor bestandsgroottes en -types
+    \item \textbf{Toegangscontrole:} Beperk gebruikerstoegang tot specifieke paden of containers
+\end{enumerate}
+
+\subsection{Vergelijking van cloudopslagdienst-integratie}
+
+\begin{table}[h]
+\centering
+\caption{Vergelijking van integratiemethoden voor cloudopslagdiensten}
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Cloudopslagdienst} & \textbf{Directe integratie mogelijkheid} & \textbf{Aanbevolen package} & \textbf{Beperkingen} \\
+\hline
+Amazon S3 & Hoog (via presigned URLs en STS) & aws-sdk & Complexere configuratie \\
+\hline
+DigitalOcean Spaces & Hoog (compatibel met S3) & aws-sdk met aangepaste endpoint & Beperktere feature set \\
+\hline
+Nextcloud & Middel (via WebDAV API) & nextcloud-client & Vereist vaak specifieke implementatie \\
+\hline
+Microsoft Azure & Hoog (via SAS tokens) & @azure/storage-blob & Goede documentatie, eenvoudige setup \\
+\hline
+Google Cloud Storage & Hoog (via signed URLs) & @google-cloud/storage & Uitgebreide mogelijkheden \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Conclusie}
+
+De integratie van diverse cloudopslagdiensten in Angular-applicaties zonder uitgebreide backend-aanpassingen is mogelijk door gebruik te maken van specifieke UI-componenten zoals \texttt{ngx-dropzone}, \texttt{ng-file-upload}, en cloudspecifieke SDK's. Het implementeren van een abstracte service laag met provider-specifieke implementaties biedt een flexibele en onderhoudbare architectuur. Door gebruik te maken van pre-signed URLs of STS-tokens kan directe communicatie met cloudopslagdiensten worden gerealiseerd, terwijl de veiligheid gewaarborgd blijft.
+
+Door de juiste combinatie van UI-componenten, authenticatiestrategieën en abstracte interfaces te kiezen, kan een robuuste oplossing worden gecreëerd die meerdere cloudopslagdiensten ondersteunt zonder significante backend-ontwikkeling. Dit resulteert in een schaalbare en efficiënte applicatiearchitectuur die directe cloudintegratie mogelijk maakt.
