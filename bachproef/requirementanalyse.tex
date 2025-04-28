@@ -46,30 +46,27 @@ Om de longlist te reduceren tot een shortlist, werden de alternatieven getoetst 
 
 De volgende tabel vergelijkt de technische integratiemogelijkheden van de verschillende cloudopslagdiensten met Angular-applicaties:
 
-% --- START NIEUWE TABEL ---
 \begin{table}[H]
     \centering
-    \footnotesize % Maakt de lettergrootte kleiner indien nodig
-    \begin{tabular}{l p{5cm} p{5cm}} % Kolombreedtes aangepast voor betere leesbaarheid
+    \footnotesize
+    \begin{tabular}{l p{5cm} p{5cm}}
       \toprule
-      \textbf{Cloudopslagdienst} & \textbf{Integratie en package} & \textbf{Beperkingen/Opmerkingen} \\ % Header aangepast
+      \textbf{Cloudopslagdienst} & \textbf{Integratie en package} & \textbf{Beperkingen/Opmerkingen} \\
       \midrule
-      Amazon S3 & Hoog (presigned URLs, STS) – \texttt{aws-sdk} & Complexere configuratie mogelijk \\ % Kleine aanpassing tekst
-      DigitalOcean Spaces & Hoog (S3-compatibel) – \texttt{aws-sdk} + custom endpoint & Soms beperktere functieset t.o.v. AWS S3 \\ % Kleine aanpassing tekst
-      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen implementatie & Vereist vaak meer eigen implementatiewerk \\ % Kleine aanpassing tekst
-      Microsoft Azure & Hoog (SAS tokens) – \texttt{@azure/storage-blob} & Relatief eenvoudige setup met SDK \\ % Kleine aanpassing tekst
-      Google Cloud Storage & Hoog (signed URLs) – \texttt{@google-cloud/storage} & Zeer veel mogelijkheden, kan complex zijn \\ % Kleine aanpassing tekst
+      Amazon S3 & Hoog (presigned URLs, STS) – \texttt{aws-sdk} & Complexere configuratie mogelijk \\
+      DigitalOcean Spaces & Hoog (S3-compatibel) – \texttt{aws-sdk} + custom endpoint & Soms beperktere functieset t.o.v. AWS S3 \\
+      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen implementatie & Vereist vaak meer eigen implementatiewerk \\
+      Microsoft Azure & Hoog (SAS tokens) – \texttt{@azure/storage-blob} & Relatief eenvoudige setup met SDK \\
+      Google Cloud Storage & Hoog (signed URLs) – \texttt{@google-cloud/storage} & Zeer veel mogelijkheden, kan complex zijn \\
       \bottomrule
     \end{tabular}
-    \caption[Vergelijking cloudintegraties]{\label{tab:cloud-integratie-vergelijking}Vergelijking van integratiemethoden voor cloudopslagdiensten.} % Label aangepast, citation toegevoegd
+    \caption[Vergelijking cloudintegraties]{\label{tab:cloud-integratie-vergelijking}Vergelijking van integratiemethoden voor cloudopslagdiensten.}
 \end{table}
-% --- EINDE NIEUWE TABEL ---
 
-Op basis van de volledige analyse van vereisten, kosten, beheer en de specifieke synergie met de bestaande infrastructuur (zie sectie \ref{sec:selectie}), werd de uiteindelijke keuze gemaakt.
-
+Op basis van de volledige analyse van vereisten, kosten, beheer en de specifieke synergie met de bestaande infrastructuur werd de uiteindelijke keuze gemaakt.
 
 \section{Selectie van de oplossing}
-Op basis van de vergelijkende analyse in Tabel \ref{tab:vergelijkingstabel} werd \textbf{DigitalOcean Spaces} geselecteerd als de meest geschikte cloudopslagoplossing voor AZL. De doorslaggevende factoren waren:
+Op basis van de vergelijkende analyse in Tabel~\ref{tab:vergelijkingstabel} werd \textbf{DigitalOcean Spaces} geselecteerd als de meest geschikte cloudopslagoplossing voor AZL. De doorslaggevende factoren waren:
 \begin{enumerate}
     \item \textbf{Synergie met bestaande infrastructuur:} De hosting van de webapplicatie bij DigitalOcean zorgt voor technische en operationele voordelen, zoals lagere latentie en gecentraliseerd beheer/facturatie.
     \item \textbf{Eenvoudig en voorspelbaar prijsmodel:} Het vaste maandelijkse bedrag is ideaal voor het budgetbeheer van een VZW en voorkomt onverwachte kosten.
