@@ -14,14 +14,13 @@ Deze studie vormt de basis voor het selecteren van een geschikte cloudopslagoplo
 \section{Huidige IT-infrastructuur bij AZL}
 Aquarius Zwemclub Lebbeke (AZL) maakt momenteel gebruik van een eenvoudige maar doeltreffende IT-infrastructuur:
 \begin{itemize}
-    \item \textbf{Hosting}: De webapplicatie gebouwd met Angular en Node.js zijn gehost op DigitalOcean.
-    \item \textbf{E-mailservices}: De SMTP-server wordt gehost bij AWS, dit omdat deze functionaliteit niet beschikbaar is bij DigitalOcean.
-    \item \textbf{Cloudopslag}: Voor het delen van bestanden tussen lesgevers wordt Dropbox gebruikt.
-    \item \textbf{Authenticatie en autorisatie}: De webapplicatie maakt gebruik van een zelfgebouwd authenticatiesysteem, er wordt dus geen gebruik gemaakt van externe diensten. Binnen de applicatie wordt reeds gebruik gemaakt van rollen.
+    \item \textbf{Hosting webapplicatie}: De interne webapplicatie, gebouwd met Angular en Node.js, is gehost op DigitalOcean.
+    \item \item \textbf{Website en databanken}: De publieke WordPress-website, de bijhorende MySQL-databank en de e-mailadressen met het domein \texttt{@aquariuslebbeke.be} worden gehost bij One.com.
+    \item \textbf{E-mailservices}: De SMTP-server voor transactionele e-mails van de webapplicatie wordt gehost bij AWS, aangezien DigitalOcean deze functionaliteit niet aanbiedt.
+    \item \textbf{Cloudopslag}: Voor het delen van bestanden tussen lesgevers wordt momenteel gebruikgemaakt van Dropbox.
+    \item \textbf{Authenticatie en autorisatie}: De webapplicatie maakt gebruik van een zelfgebouwd authenticatiesysteem zonder externe authenticatiediensten. Binnen de applicatie wordt reeds gebruikgemaakt van rollen.
 \end{itemize}
-Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: er is geen integratie tussen de cloudopslag en de 
-webapplicatie, en geautomatiseerd toegangsbeheer ontbreekt. Een complete oplossing kan deze problemen aanpakken 
-door integratie tussen de cloudopslag en de applicaties mogelijk te maken, wat zal zorgen voor een gebruiksvriendelijkere en efficiëntere werking.
+Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: er is geen integratie tussen de cloudopslag en de webapplicatie, en geautomatiseerd toegangsbeheer ontbreekt. Een nieuwe oplossing kan deze problemen aanpakken door integratie tussen cloudopslag en applicaties mogelijk te maken, wat zal zorgen voor een gebruiksvriendelijkere en efficiëntere werking.
 
 \section{Integratie van cloudopslag in webapplicaties}
 \subsection{Architecturele overwegingen}
@@ -42,7 +41,7 @@ Om een geschikte cloudopslagoplossing voor AZL te vinden, zijn verschillende clo
     \item Onderhoudsvriendelijk zijn: De oplossing moet eenvoudig te beheren zijn door de webmaster na de implementatie.
 \end{itemize}
 
-\subsubsection{Dropbox}
+\subsection{Dropbox}
 Hoewel Dropbox een gebruiksvriendelijke oplossing biedt voor het delen van bestanden, voldoet het niet aan alle behoeften van AZL. 
 Het gebrek aan integratie met de bestaande systemen zorgt voor extra werk voor de beheerders, en het ontbreken van geautomatiseerd 
 toegangsbeheer maakt het moeilijk om de juiste rechten op elk tijdstip te garanderen voor alle gebruikers. Bovendien vereist Dropbox dat 
