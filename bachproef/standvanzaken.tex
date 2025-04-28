@@ -26,9 +26,9 @@ Hoewel deze infrastructuur functioneel is, kent AZL verschillende uitdagingen: e
 \subsection{Architecturele overwegingen}
 Bij het integreren van cloudopslag in webapplicaties is de architectuur een cruciale factor. Integratie kan worden gerealiseerd via drie primaire architecturele benaderingen:
 \begin{itemize}
-  \item \textbf{API-gebaseerde integratie}: De webapplicatie communiceert via API's met de cloudopslag.
-  \item \textbf{SDK-gebaseerde integratie}: Software Development Kits (SDK's) vereenvoudigen de communicatie tussen applicatie en cloudopslag.
-  \item \textbf{Hybride integratie}: Combinatie van API's en SDK's voor optimale flexibiliteit.
+  \item \textbf{API-gebaseerde integratie}: De webapplicatie communiceert rechtstreeks via API's (Application Programming Interfaces) met de cloudopslag. Dit vereist handmatige aanroepen van API-endpoints en het verwerken van de responses.
+  \item \textbf{SDK-gebaseerde integratie}: Software Development Kits (SDK's) bouwen verder op de onderliggende API's en bieden vooraf gemaakte functies en klassen. Ze vereenvoudigen de communicatie door complexe API-aanroepen te abstraheren, waardoor ontwikkelaars sneller en veiliger kunnen integreren zonder zelf de volledige logica te hoeven implementeren.
+  \item \textbf{Hybride integratie}: Een combinatie van API's en SDK's voor optimale flexibiliteit. Bijvoorbeeld, standaardhandelingen gebeuren via de SDK, terwijl specifieke, geavanceerde functionaliteit direct via de API wordt aangesproken.
 \end{itemize}
 
 \section{Vergelijkende analyse van cloudopslagoplossingen}
