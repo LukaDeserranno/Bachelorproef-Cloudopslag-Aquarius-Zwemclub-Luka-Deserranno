@@ -1,21 +1,82 @@
-\chapter{\IfLanguageName{dutch}{Requirement Analyse}{Requirement Analysis}}
-\label{ch:requirement-analyse}
+\chapter{\IfLanguageName{dutch}{Vergelijking en selectie van cloudopslagoplossingen}{Comparison and selection of cloud storage solutions}}
+\label{ch:vergelijking}
+Dit hoofdstuk behandelt het proces van het identificeren, vergelijken en selecteren van een geschikte cloudopslagoplossing voor Aquarius Zwemclub Lebbeke (AZL), ter vervanging van de huidige Dropbox-implementatie. Het proces start met het definiëren van de vereisten, gevolgd door een overzicht van mogelijke alternatieven, een vergelijkende analyse, en eindigt met de selectie van de meest geschikte oplossing.
+\section{Functionele en niet-functionele vereisten}
+De selectie van een nieuwe cloudopslagoplossing startte met een grondige analyse van de behoeften van AZL. 
+In samenwerking met de webmaster, die de technische systemen beheert, werden de functionele en niet-functionele 
+eisen vastgesteld om de beperkingen van de huidige Dropbox-opstelling aan te pakken. 
+Deze beperkingen omvatten verouderde toegangsrechten, gebrek aan integratie met de webapplicatie en website, 
+en toegankelijkheidsproblemen voor lesgevers zonder account. De vereisten werden geprioriteerd met de MoSCoW-methode.
 
-Dit hoofdstuk beschrijft het proces en de resultaten van de requirementsanalysefase, die cruciaal is voor het selecteren van een cloudopslagoplossing die effectief voldoet aan de behoeften van Aquarius Zwemclub Lebbeke (AZL). Deze fase omvatte nauwe samenwerking met de webmaster van AZL, die de technische systemen beheert, om een grondig begrip te verzekeren van de huidige uitdagingen en toekomstige noden.
-
-Het primaire doel van deze analyse was het definiëren van de functionele en niet-functionele vereisten voor een nieuw cloudopslagsysteem ter vervanging van de huidige Dropbox-oplossing. De bestaande Dropbox-opstelling kent verschillende beperkingen, waaronder verouderde toegangsrechten, gebrek aan integratie met AZL's webapplicatie en WordPress-site, en toegankelijkheidsproblemen voor lesgevers zonder Dropbox-account, wat leidt tot verhoogde administratieve werklast.
-
-Kerngebieden die tijdens deze fase werden onderzocht, omvatten:
-
+\subsection{Functionele vereisten}
+Deze vereisten beschrijven wat het systeem moet kunnen doen:
 \begin{itemize}
-    \item \textbf{Toegangsbeheer:} Het bepalen hoe efficiënt en veilig toegang voor lesgevers kan worden beheerd, waarbij rechten dynamisch kunnen worden bijgewerkt op basis van hun status (bv. starten of stoppen bij de club). De oplossing moet gedetailleerde controle mogelijk maken zodat gebruikers enkel toegang hebben tot relevante informatie. Een kernvereiste is het mogelijk maken van toegang voor lesgevers zonder hen te dwingen extra accounts aan te maken.
-    \item \textbf{Integratie:} Het evalueren van de mogelijkheden voor naadloze integratie met de bestaande IT-infrastructuur van AZL, specifiek de op maat gemaakte webapplicatie (Angular/Node.js) en de publieke WordPress-website.
-    \item \textbf{Gebruiksvriendelijkheid:} Verzekeren dat de oplossing gebruiksvriendelijk is voor lesgevers, die mogelijk wisselende niveaus van technische expertise hebben, alsook beheersbaar is voor de webmaster.
-    \item \textbf{Beveiliging en Privacy:} Implementeren van duidelijke machtigingsstructuren om gegevensprivacy te beschermen en te verzekeren dat lesgevers enkel toegang hebben tot geautoriseerde bestanden en mappen.
-    \item \textbf{Kosteneffectiviteit:} Analyseren van de kosten verbonden aan potentiële oplossingen in relatie tot het budget van AZL, rekening houdend met het feit dat de huidige oplossing gratis is.
-    \item \textbf{Onderhoudbaarheid:} Selecteren van een oplossing die op lange termijn eenvoudig te beheren en te onderhouden is door de webmaster.
+    \item \textbf{Efficiënt en dynamisch toegangsbeheer (Must Have):} Het systeem moet toelaten om toegangsrechten voor lesgevers eenvoudig en veilig te beheren, met de mogelijkheid om rechten dynamisch aan te passen op basis van hun status (bv. starten/stoppen bij de club). Gedetailleerde controle is nodig zodat gebruikers enkel toegang hebben tot relevante informatie. Toegang moet mogelijk zijn zonder dat lesgevers een extra account moeten aanmaken.
+    \item \textbf{Integratie met bestaande systemen (Must Have):} Naadloze integratie met de bestaande IT-infrastructuur, specifiek de op maat gemaakte webapplicatie (Angular/Node.js) en de publieke WordPress-website, is cruciaal.
+    \item \textbf{Bestandsbeheer:} Gebruikers (voornamelijk de webmaster en mogelijk lesgevers via de webapplicatie) moeten bestanden kunnen uploaden, downloaden, organiseren in mappen, en delen.
 \end{itemize}
 
-Om deze vereisten te structureren, werd de MoSCoW-methode toegepast om ze te prioriteren in 'Must Have', 'Should Have', 'Could Have', en 'Won't Have' categorieën. Deze prioritering zorgt ervoor dat de geselecteerde oplossing primair de meest kritieke noden van AZL aanpakt.
+\subsection{Niet-Functionele vereisten}
+Deze vereisten beschrijven de kwaliteitseisen en randvoorwaarden:
+\begin{itemize}
+    \item \textbf{Gebruiksvriendelijkheid (Must Have):} De oplossing moet eenvoudig te gebruiken zijn voor lesgevers met wisselende technische expertise. De toegang via de webapplicatie moet intuïtief zijn.
+    \item \textbf{Beveiliging en Privacy (Must Have):} Duidelijke machtigingsstructuren moeten gegevensprivacy beschermen. Lesgevers mogen enkel toegang hebben tot geautoriseerde bestanden en mappen. Encryptie van data (in rust en tijdens overdracht) is wenselijk.
+    \item \textbf{Onderhoudbaarheid (Should Have):} De oplossing moet op lange termijn eenvoudig te beheren en onderhouden zijn door de webmaster.
+    \item \textbf{Kosteneffectiviteit (Must Have):} De kosten moeten passen binnen het budget van AZL, rekening houdend met het feit dat de huidige oplossing gratis is. Een voorspelbaar prijsmodel is wenselijk.
+    \item \textbf{Schaalbaarheid (Could Have):} Hoewel de huidige behoeften beperkt zijn, moet de oplossing potentieel kunnen meegroeien met de club.
+    \item \textbf{Betrouwbaarheid en Beschikbaarheid (Should Have):} De oplossing moet betrouwbaar zijn en een hoge beschikbaarheid bieden.
+\end{itemize}
 
-Het resultaat van deze fase is een gedetailleerde en geprioriteerde lijst van vereisten, die dient als basis voor het evalueren van potentiële cloudopslagoplossingen in de volgende fasen (Longlist en Shortlist). Deze gestructureerde aanpak beoogt te garanderen dat de uiteindelijk gekozen oplossing perfect aansluit bij de operationele noden en technische omgeving van AZL.
+\section{Overzicht van cloudopslagalternatieven}
+\label{sec:overzicht_alternatieven}
+Op basis van een literatuurstudie en de gedefinieerde vereisten, werd een longlist van potentiële cloudopslagoplossingen samengesteld. 
+Zowel commerciële als open-source opties werden overwogen. De volgende oplossingen werden geïdentificeerd als potentiële kandidaten:
+\begin{itemize}
+    \item \textbf{Dropbox:} De huidige oplossing, meegenomen als benchmark. Biedt een bekende interface maar kent significante problemen voor AZL. Integratie is complex door het ontbreken van OAuth 2.0 in de AZL-applicatie. Gratis opslag is beperkt.
+    \item \textbf{Amazon S3:} Toonaangevende, schaalbare objectopslagdienst met uitgebreide API's en beheermogelijkheden (IAM). Integratie via pre-signed URLs is een goede optie. Kosten zijn flexibel maar kunnen complex worden ('pay-as-you-go').
+    \item \textbf{DigitalOcean Spaces:} S3-compatibele objectopslag, gericht op eenvoud en voorspelbare prijzen. Voordeel is dat AZL's infrastructuur al bij DigitalOcean draait. Biedt een eenvoudig prijsmodel (\$5/maand voor 250 GiB opslag en 1 TiB transfer) en ingebouwde CDN. Integratie via AWS SDK is mogelijk. Beheer via controlepaneel of CLI.
+    \item \textbf{Nextcloud:} Open-source oplossing voor self-hosting of gehost gebruik. Biedt volledige controle over data, uitgebreid toegangsbeheer en API's voor integratie. Geen licentiekosten, maar wel infrastructuur- en onderhoudskosten bij self-hosting.
+    \item \textbf{Microsoft Azure Blob Storage:} Schaalbare objectopslag binnen het Azure ecosysteem. Sterke integratie met Azure AD voor toegangsbeheer. Prijsstelling kan variëren en complex zijn voor kleine organisaties.
+    \item \textbf{Google Cloud Storage:} Schaalbare objectopslag met goede prestaties en integratie met Google-diensten. Geavanceerde beveiliging en IAM voor toegangscontrole. Complexe prijsstructuur kan een nadeel zijn voor AZL.
+\end{itemize}
+
+\section{Vergelijkende tabel: oplossingen versus vereisten}
+\label{sec:vergelijkingstabel}
+Om de longlist te reduceren tot een shortlist, werden de alternatieven getoetst aan de kritieke vereisten van AZL. Dropbox viel af vanwege de fundamentele problemen die de aanleiding vormden voor dit onderzoek. Microsoft Azure en Google Cloud Storage werden als minder ideaal beschouwd vanwege potentiële kostencomplexiteit en beheeroverhead voor een VZW zonder bestaande infrastructuur op die platformen. Dit resulteerde in een shortlist van Amazon S3, DigitalOcean Spaces en Nextcloud.
+
+De volgende tabel vergelijkt de technische integratiemogelijkheden van de verschillende cloudopslagdiensten met Angular-applicaties:
+
+% --- START NIEUWE TABEL ---
+\begin{table}[H]
+    \centering
+    \footnotesize % Maakt de lettergrootte kleiner indien nodig
+    \begin{tabular}{l p{5cm} p{5cm}} % Kolombreedtes aangepast voor betere leesbaarheid
+      \toprule
+      \textbf{Cloudopslagdienst} & \textbf{Integratie en package} & \textbf{Beperkingen/Opmerkingen} \\ % Header aangepast
+      \midrule
+      Amazon S3 & Hoog (presigned URLs, STS) – \texttt{aws-sdk} & Complexere configuratie mogelijk \\ % Kleine aanpassing tekst
+      DigitalOcean Spaces & Hoog (S3-compatibel) – \texttt{aws-sdk} + custom endpoint & Soms beperktere functieset t.o.v. AWS S3 \\ % Kleine aanpassing tekst
+      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen implementatie & Vereist vaak meer eigen implementatiewerk \\ % Kleine aanpassing tekst
+      Microsoft Azure & Hoog (SAS tokens) – \texttt{@azure/storage-blob} & Relatief eenvoudige setup met SDK \\ % Kleine aanpassing tekst
+      Google Cloud Storage & Hoog (signed URLs) – \texttt{@google-cloud/storage} & Zeer veel mogelijkheden, kan complex zijn \\ % Kleine aanpassing tekst
+      \bottomrule
+    \end{tabular}
+    \caption[Vergelijking cloudintegraties]{\label{tab:cloud-integratie-vergelijking}Vergelijking van integratiemethoden voor cloudopslagdiensten.} % Label aangepast, citation toegevoegd
+\end{table}
+% --- EINDE NIEUWE TABEL ---
+
+Op basis van de volledige analyse van vereisten, kosten, beheer en de specifieke synergie met de bestaande infrastructuur (zie sectie \ref{sec:selectie}), werd de uiteindelijke keuze gemaakt.
+
+
+\section{Selectie van de oplossing}
+Op basis van de vergelijkende analyse in Tabel \ref{tab:vergelijkingstabel} werd \textbf{DigitalOcean Spaces} geselecteerd als de meest geschikte cloudopslagoplossing voor AZL. De doorslaggevende factoren waren:
+\begin{enumerate}
+    \item \textbf{Synergie met bestaande infrastructuur:} De hosting van de webapplicatie bij DigitalOcean zorgt voor technische en operationele voordelen, zoals lagere latentie en gecentraliseerd beheer/facturatie.
+    \item \textbf{Eenvoudig en voorspelbaar prijsmodel:} Het vaste maandelijkse bedrag is ideaal voor het budgetbeheer van een VZW en voorkomt onverwachte kosten.
+    \item \textbf{Eenvoudige technische integratie:} De S3-compatibele API maakt integratie met de bestaande Node.js backend relatief eenvoudig met behulp van de AWS SDK.
+    \item \textbf{Gebruiksgemak voor beheer:} Het beheerplatform is al bekend bij de webmaster en staat bekend om zijn eenvoud.
+\end{enumerate}
+
+Nextcloud werd aangemerkt als de primaire back-up optie, mocht DigitalOcean Spaces tijdens de Proof of Concept (PoC) fase onverwachte beperkingen vertonen. De flexibiliteit en controle over data zijn sterke punten, hoewel de beheerslast hoger ligt. Amazon S3 bleef een technisch valide, maar minder geprefereerde optie vanwege de kostencomplexiteit en het ontbreken van directe synergie.
+
+De volgende stap in het onderzoek was het ontwikkelen en evalueren van een Proof of Concept met DigitalOcean Spaces (zie Hoofdstuk 7).
