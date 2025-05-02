@@ -82,3 +82,193 @@ permissions: [
 \end{minted}
 \caption[Opbouw van permissies bij mapcreatie]{Rechten worden opgebouwd met directe en geërfde permissies.}
 \end{listing}
+
+\section{Cloudopslag via S3-integratie (DigitalOcean Spaces)}
+
+Om de bestanden daadwerkelijk op te slaan werd gebruikgemaakt van \textbf{DigitalOcean Spaces}, een S3-compatibele cloudopslagdienst. Dankzij de compatibiliteit met Amazon's \texttt{S3} API kon gebruik gemaakt worden van de officiële AWS SDK voor Node.js (\texttt{@aws-sdk/client-s3}).
+
+\subsection{Configuratie van omgevingsvariabelen}
+
+Alle benodigde connectie-instellingen worden beheerd via een configuratiebestand. Zo kunnen sleutels en endpoints eenvoudig aangepast worden zonder de applicatiecode te wijzigen.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export default {
+  // S3 configuration
+  S3_ENDPOINT: 'S3_ENDPOINT',
+  S3_REGION: 'S3_REGION',
+  S3_BUCKET_NAME: 'S3_BUCKET_NAME',
+  S3_ACCESS_KEY: 'S3_ACCESS_KEY',
+  S3_SECRET_ACCESS_KEY: 'S3_SECRET_ACCESS_KEY',
+};
+\end{minted}
+\caption[Omgevingsvariabelen voor S3]{Configuratie van S3-compatibele opslag via \texttt{config}.}
+\end{listing}
+
+\subsection{Initialisatie van de S3-client}
+
+De S3-client wordt geïnitialiseerd met de juiste toegangssleutels en endpoint. Dit gebeurt in een apart \texttt{aws.ts}-bestand, waardoor hergebruik in andere services mogelijk blijft.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export const S3 = new S3Client({
+  credentials: {
+    accessKeyId: S3_ACCESS_KEY,
+    secretAccessKey: S3_SECRET_ACCESS_KEY,
+  },
+  endpoint: S3_ENDPOINT,
+  region: S3_REGION,
+});
+\end{minted}
+\caption[Initialisatie van de S3-client]{Verbinding maken met DigitalOcean Spaces via de AWS SDK.}
+\end{listing}
+
+\subsection{Gebruik in de StorageService}
+
+De interactie met de cloudopslag gebeurt via AWS-commando’s zoals \texttt{PutObjectCommand} voor upload, \texttt{GetObjectCommand} voor download, en \texttt{ListObjectsV2Command} voor overzicht. Een voorbeeld van het importeren van deze commando’s:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+import {
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+  HeadObjectCommand
+} from '@aws-sdk/client-s3';
+\end{minted}
+\caption[Import van S3-commando's]{Import van S3-commando's om bestanden te beheren in de cloud.}
+\end{listing}
+
+Bij het uploaden van een bestand wordt bijvoorbeeld volgende commando gebruikt:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+const uploadCommand = new PutObjectCommand({
+  Bucket: S3_BUCKET,
+  Key: path,
+  Body: buffer,
+  ContentType: mimeType,
+});
+await S3.send(uploadCommand);
+\end{minted}
+\caption[Uploaden van bestanden naar S3]{Uploadcommando voor het opslaan van bestanden in DigitalOcean Spaces.}
+\end{listing}
+
+\subsection{Beveiliging}
+
+De toegang tot bestanden wordt niet rechtstreeks openbaar gemaakt. In plaats daarvan worden \textbf{gesigneerde URL’s} gegenereerd via \texttt{getSignedUrl}, zodat gebruikers tijdelijk toegang krijgen tot een bestand zonder dat het publiek toegankelijk wordt.
+
+\section{Frontendcomponent: Bestandsbeheer}
+
+Om de backendfunctionaliteit bruikbaar te maken voor de eindgebruiker werd een op maat gemaakte Angular-component ontwikkeld. Deze component biedt een overzichtelijke interface voor het beheren van mappen en bestanden, inclusief upload-, download- en navigatiemogelijkheden. De component is beschikbaar op een aparte route die enkel toegankelijk is voor gebruikers met de juiste rol.
+
+\subsection{Componentstructuur}
+
+De \texttt{FileManagerComponent} is opgebouwd als standalone component en maakt gebruik van Angular-modules zoals \texttt{FormsModule}, \texttt{RouterModule}, en een custom pipe voor bestandsformaten. De HTML bevat onder andere een breadcrumbnavigatie, een uploadknop en een tabel met alle bestanden.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+@Component({
+  selector: 'app-file-manager',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    FileSizePipe,
+    PageComponent,
+    HttpErrorComponent,
+    LoaderComponent
+  ],
+  templateUrl: './file-manager.component.html',
+  styleUrls: ['./file-manager.component.css']
+})
+export class FileManagerComponent implements OnInit {
+  ...
+}
+\end{minted}
+\caption[Structuur van de FileManagerComponent]{Standalone Angular-component voor bestandsbeheer.}
+\end{listing}
+
+\subsection{Uploadfunctionaliteit}
+
+Bestanden worden geüpload naar het juiste pad via de backend-API. De gebruikersinterface gebruikt \texttt{FormData} en plaatst het geselecteerde bestand op het correcte pad via de Angular-service.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+const uploadRequest = {
+  path: uploadPath,
+  rolesAllowed: []
+};
+
+this.fileManagerApi.uploadFile(uploadRequest, file).subscribe({
+  next: (response) => {
+    this.loadFiles();
+  },
+  error: (error) => {
+    this.error = error;
+  }
+});
+\end{minted}
+\caption[Uploadfunctionaliteit in de component]{Bestanden worden geüpload met behulp van FormData en de API-service.}
+\end{listing}
+
+\subsection{Communicatie met de backend}
+
+Alle communicatie tussen frontend en backend verloopt via de \texttt{FileManagerApiService}. Deze service definieert methodes zoals \texttt{listFiles}, \texttt{getSignedUrl}, \texttt{uploadFile}, \texttt{createFolder} en \texttt{deleteFile}.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+listFiles(request: ListFilesRequest): Observable<StorageResponse<StorageFile[]>> {
+  const params: any = {};
+  if (request.prefix) params.prefix = request.prefix;
+  if (request.maxKeys) params.maxKeys = request.maxKeys;
+  if (request.continuationToken) params.continuationToken = request.continuationToken;
+
+  return this.http.get<StorageResponse<StorageFile[]>>(this.baseUrl, { params });
+}
+\end{minted}
+\caption[API-call naar de backend]{De lijst met bestanden wordt opgehaald via een \texttt{GET} request.}
+\end{listing}
+
+\subsection{Datamodel en types}
+
+De component en service maken gebruik van sterke types voor de communicatie. Het volgende model beschrijft een bestand of map in het systeem:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export interface StorageFile {
+  name: string;
+  path: string;
+  size?: number;
+  lastModified?: string;
+  isFolder: boolean;
+}
+\end{minted}
+\caption[Bestandstype in de frontend]{Interface voor bestanden en mappen in het frontendmodel.}
+\end{listing}
+
+\subsection{Routebescherming}
+
+De component is enkel toegankelijk voor gebruikers met de juiste rechten. Dit wordt afgedwongen via Angular routeguards zoals \texttt{authGuard} en \texttt{permissionGuard}, en beperkt tot specifieke rollen.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export const FILE_MANAGER_ROUTES: Routes = [
+  {
+    path: '',
+    canActivate: [authGuard, permissionGuard],
+    data: {
+      roles: [ROLE_ADMIN, ROLE_TRAINER],
+    },
+    loadComponent: () => import('./file-manager.component').then(m => m.FileManagerComponent),
+  },
+];
+\end{minted}
+\caption[Routeconfiguratie]{Beveiligde route naar de FileManagerComponent.}
+\end{listing}
+
+\subsection{Gebruiksvriendelijkheid}
+
+De interface is ontworpen met gebruiksgemak in gedachten. Bestanden kunnen eenvoudig worden aangeklikt om te openen of gedownload te worden via een gesigneerde URL. Navigatie via mappen gebeurt via een eenvoudige breadcrumbstructuur. Fouten en laadtoestanden worden duidelijk weergegeven via aparte componenten zoals \texttt{app-loader} en \texttt{app-http-error}.
