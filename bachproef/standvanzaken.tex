@@ -74,7 +74,7 @@ en beveiligingsstructuur van de applicatie.
 
 S3-compatibele cloudopslag biedt verschillende technische voordelen voor Angular-webapplicaties op het vlak van prestaties, beveiliging, integratie en kostenefficiëntie. Zo tonen \textcite{Jamal2021Performance} aan dat S3-opslag goede prestaties levert qua snelheid, lage netwerklast genereert, en kostenbesparend is ten opzichte van alternatieve systemen. Hierdoor kunnen Angular-applicaties efficiënt bestanden verwerken in real time.
 
-Op het gebied van prestaties wijzen \textcite{Liang2014FAST} op aanzienlijke dalingen in latentiepercentielen (76%, 80% en 85% bij 2~MB-bestanden) dankzij het gebruik van erasure coding gecombineerd met parallelle verbindingen. Dit resulteert in een merkbare verhoging van de efficiëntie.
+Op het gebied van prestaties wijzen \textcite{Liang2014FAST} op aanzienlijke dalingen in latentiepercentielen (76\%, 80\% en 85\% bij 2~MB-bestanden) dankzij het gebruik van erasure coding gecombineerd met parallelle verbindingen. Dit resulteert in een merkbare verhoging van de efficiëntie.
 
 Beveiligingsaspecten worden versterkt door systemen zoals FADE. \textcite{Tang2010FADE, Tang2012Secure} illustreren hoe gegarandeerde bestandsverwijdering en fijnmazige toegangscontrole kunnen worden geïmplementeerd met minimale impact op prestaties en kosten. Bovendien komen S3-oplossingen tegemoet aan compliancevereisten. \textcite{kolpakov2018data} beschrijven methoden voor integratie die voldoen aan normen zoals PCI DSS, HIPAA/HITECH en FEDRAMP.
 
@@ -94,7 +94,7 @@ S3 slaat gegevens op in \textit{buckets}, waarin objecten – bestaande uit data
 
 Voor AZL is vooral de ondersteuning voor \textit{pre-signed URLs} relevant. Deze maken veilige frontend uploads mogelijk zonder dat AWS-credentials in de clientcode moeten worden opgenomen~\cite{aws_presigned}. De backend (Node.js) kan instaan voor het genereren van deze tijdelijke links, waarmee de Angular frontend rechtstreeks bestanden kan opslaan of ophalen.
 
-Qua schaalbaarheid en betrouwbaarheid biedt Amazon S3 sterke garanties: een beschikbaarheid van 99,99% en een duurzaamheid van 99,999999999%~\cite{aws_availability}. Bovendien kunnen verschillende opslagklassen worden gebruikt afhankelijk van de toegangspatronen, gaande van S3 Standard voor frequente toegang tot Glacier Deep Archive voor langetermijnarchivering~\cite{aws_classes}.
+Qua schaalbaarheid en betrouwbaarheid biedt Amazon S3 sterke garanties: een beschikbaarheid van 99,99\% en een duurzaamheid van 99,999999999\%~\cite{aws_availability}. Bovendien kunnen verschillende opslagklassen worden gebruikt afhankelijk van de toegangspatronen, gaande van S3 Standard voor frequente toegang tot Glacier Deep Archive voor langetermijnarchivering~\cite{aws_classes}.
 
 Toegangsbeheer wordt in S3 geregeld via \textit{IAM policies}, \textit{bucket policies} en optioneel \textit{access points}. Deze mechanismen maken fijnmazige controle mogelijk over wie welke bestanden mag lezen, schrijven of verwijderen, wat toelaat om rolgebaseerde toegang toe te passen voor lesgevers en beheerders~\cite{aws_accesscontrol}.
 
