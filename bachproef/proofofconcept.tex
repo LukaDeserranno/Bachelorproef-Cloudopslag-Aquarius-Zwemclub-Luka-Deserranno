@@ -3,3 +3,82 @@
 
 \chapter{\IfLanguageName{dutch}{Proof of Concept}{Proof of Concept}}
 \label{ch:proof-of-concept}
+
+\section{Introductie}
+
+Tijdens de uitwerking van de proof of concept werd snel duidelijk dat het bestaande rolmodel binnen AZL onvoldoende flexibel was. De bestaande implementatie ondersteunde enkel algemene rollen zoals \texttt{admin} of \texttt{trainer}, maar bood geen gedetailleerde toegangscontrole per map of bestand. Omdat AZL een fijnmaziger toegangsbeheer wilde, werd gekozen om een eigen \texttt{FilePermission}-systeem te ontwikkelen op basis van een gestructureerd database model.
+
+\section{Modellering van toegangsrechten}
+
+Het toegangsrechtensysteem werd opgebouwd rond het idee van \textbf{resource-gebaseerde permissies}. Elk bestand of map is een \emph{resource} waaraan specifieke rechten gekoppeld worden, zoals \texttt{READ}, \texttt{CREATE}, \texttt{UPDATE}, \texttt{DELETE} en \texttt{MANAGE}. Deze rechten worden toegekend aan gebruikers en kunnen ook geërfd worden van bovenliggende mappen.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export enum FilePermissionRole {
+  READ = 'READ',
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+  MANAGE = 'MANAGE'
+}
+\end{minted}
+\caption[Permissierollen per bestand of map]{Enum die de beschikbare permissierollen definieert.}
+\end{listing}
+
+Voor elk resourcepad wordt er een document aangemaakt in MongoDB:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+const filePermissionSchema = new Schema({
+  resourceType: { type: String, enum: ['folder', 'file'], required: true },
+  resourcePath: { type: String, required: true, unique: true },
+  ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  permissions: [{
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    roles: { type: [String], enum: Object.values(FilePermissionRole), required: true },
+    inherited: { type: Boolean, default: false, required: true }
+  }],
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
+\end{minted}
+\caption[Schema voor FilePermission documenten]{Mongoose-schema voor toegangsbeheer per map of bestand.}
+\end{listing}
+
+\section{Routes en integratie met backend}
+
+De \texttt{storage}-routes werden volledig herschreven en geïntegreerd met de \texttt{PermissionService}. Elke route controleert nu automatisch of de gebruiker de juiste rechten heeft alvorens toegang toe te staan. Hieronder volgt een voorbeeld van de \texttt{GET /api/files} route:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+const listFiles = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.session.userId;
+  const request: ListFilesRequest = {
+    prefix: req.query.prefix as string,
+    maxKeys: req.query.maxKeys ? parseInt(req.query.maxKeys as string, 10) : undefined,
+    continuationToken: req.query.continuationToken as string,
+  };
+
+  const response = await storageService.listFiles(request, userId);
+  res.status(response.code).json(response);
+};
+\end{minted}
+\caption[Route voor bestandsoverzicht]{Voorbeeld van de backendroute voor het ophalen van bestanden met toegangscontrole.}
+\end{listing}
+
+\section{Permissiecontrole en overerving}
+
+De kern van het toegangsbeheer zit vervat in de \texttt{PermissionService}. Wanneer een nieuwe map wordt aangemaakt, worden de rechten bepaald op basis van de aanmaker, admins en eventueel overgenomen van een bovenliggende map:
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+permissions: [
+  { userId: creatorId, roles: [READ, CREATE, UPDATE, DELETE, MANAGE], inherited: false },
+  ...adminUsers.map(adminId => ({ userId: adminId, roles: [...], inherited: false })),
+  ...(parentPermissions ? parentPermissions.permissions.map(p => ({
+    userId: p.userId, roles: p.roles, inherited: true
+  })) : [])
+]
+\end{minted}
+\caption[Opbouw van permissies bij mapcreatie]{Rechten worden opgebouwd met directe en geërfde permissies.}
+\end{listing}
