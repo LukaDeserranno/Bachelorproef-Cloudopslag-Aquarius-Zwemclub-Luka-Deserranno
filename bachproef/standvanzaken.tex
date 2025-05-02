@@ -72,19 +72,19 @@ en beveiligingsstructuur van de applicatie.
 
 \subsection{S3-Compatibele Object Storage}
 
-S3-compatibele cloudopslag biedt verschillende technische voordelen voor Angular-webapplicaties op het vlak van prestaties, beveiliging, integratie en kostenefficiëntie. Zo tonen Jamal et al.~\cite{Jamal2021Performance} aan dat S3-opslag goede prestaties levert qua snelheid, lage netwerklast genereert, en kostenbesparend is ten opzichte van alternatieve systemen. Hierdoor kunnen Angular-applicaties efficiënt bestanden verwerken in real time.
+S3-compatibele cloudopslag biedt verschillende technische voordelen voor Angular-webapplicaties op het vlak van prestaties, beveiliging, integratie en kostenefficiëntie. Zo tonen \textcite{Jamal2021Performance} aan dat S3-opslag goede prestaties levert qua snelheid, lage netwerklast genereert, en kostenbesparend is ten opzichte van alternatieve systemen. Hierdoor kunnen Angular-applicaties efficiënt bestanden verwerken in real time.
 
-Op het gebied van prestaties wijzen Liang en Kozat~\cite{Liang2014FAST} op aanzienlijke dalingen in latentiepercentielen (76\%, 80\% en 85\% bij 2~MB-bestanden) dankzij het gebruik van erasure coding gecombineerd met parallelle verbindingen. Dit resulteert in een merkbare verhoging van de efficiëntie.
+Op het gebied van prestaties wijzen \textcite{Liang2014FAST} op aanzienlijke dalingen in latentiepercentielen (76%, 80% en 85% bij 2~MB-bestanden) dankzij het gebruik van erasure coding gecombineerd met parallelle verbindingen. Dit resulteert in een merkbare verhoging van de efficiëntie.
 
-Beveiligingsaspecten worden versterkt door systemen zoals FADE. Tang et al.~\cite{Tang2010FADE, Tang2012Secure} illustreren hoe gegarandeerde bestandsverwijdering en fijnmazige toegangscontrole kunnen worden geïmplementeerd met minimale impact op prestaties en kosten. Bovendien komen S3-oplossingen tegemoet aan compliancevereisten. Колпаков en Петренко~\cite{kolpakov2018data} beschrijven methoden voor integratie die voldoen aan normen zoals PCI DSS, HIPAA/HITECH en FEDRAMP.
+Beveiligingsaspecten worden versterkt door systemen zoals FADE. \textcite{Tang2010FADE, Tang2012Secure} illustreren hoe gegarandeerde bestandsverwijdering en fijnmazige toegangscontrole kunnen worden geïmplementeerd met minimale impact op prestaties en kosten. Bovendien komen S3-oplossingen tegemoet aan compliancevereisten. \textcite{kolpakov2018data} beschrijven methoden voor integratie die voldoen aan normen zoals PCI DSS, HIPAA/HITECH en FEDRAMP.
 
 Tot slot ondersteunen S3-oplossingen diverse integratiemethoden—zoals directe API-aanroepen, proxyservers en overlaymechanismen—waardoor ontwikkelaars de flexibiliteit hebben om opslagfunctionaliteit te integreren zonder de Angular-businesslogica te belasten.
 
 \textbf{Samengevat zijn de voornaamste technische voordelen:}
 \begin{itemize}
-    \item Verbeterde prestaties met lagere latentie en een gunstige kostenefficiëntie door gebruik van S3-compatibele opslag.
-    \item Verhoogde beveiliging door gegarandeerde verwijdering, encryptie en fijnmazige toegangscontrole op bucketniveau.
-    \item Backend-gebaseerde integratie: de Angular frontend communiceert uitsluitend met de eigen backend-API, die de interactie met de cloudopslag verzorgt. Hierdoor blijft de opslaginfrastructuur afgeschermd van de clientzijde, wat de beveiliging en beheersbaarheid aanzienlijk verhoogt.
+    \item Verbeterde prestaties met lagere latentie en een gunstige kostenefficiëntie door gebruik van S3-compatibele opslag.
+    \item Verhoogde beveiliging door gegarandeerde verwijdering, encryptie en fijnmazige toegangscontrole op bucketniveau.
+    \item Backend-gebaseerde integratie: de Angular frontend communiceert uitsluitend met de eigen backend-API, die de interactie met de cloudopslag verzorgt. Hierdoor blijft de opslaginfrastructuur afgeschermd van de clientzijde, wat de beveiliging en beheersbaarheid aanzienlijk verhoogt.
 \end{itemize}
 
 \subsubsection{Amazon S3}
@@ -94,7 +94,7 @@ S3 slaat gegevens op in \textit{buckets}, waarin objecten – bestaande uit data
 
 Voor AZL is vooral de ondersteuning voor \textit{pre-signed URLs} relevant. Deze maken veilige frontend uploads mogelijk zonder dat AWS-credentials in de clientcode moeten worden opgenomen~\cite{aws_presigned}. De backend (Node.js) kan instaan voor het genereren van deze tijdelijke links, waarmee de Angular frontend rechtstreeks bestanden kan opslaan of ophalen.
 
-Qua schaalbaarheid en betrouwbaarheid biedt Amazon S3 sterke garanties: een beschikbaarheid van 99,99\% en een duurzaamheid van 99,999999999\%~\cite{aws_availability}. Bovendien kunnen verschillende opslagklassen worden gebruikt afhankelijk van de toegangspatronen, gaande van S3 Standard voor frequente toegang tot Glacier Deep Archive voor langetermijnarchivering~\cite{aws_classes}.
+Qua schaalbaarheid en betrouwbaarheid biedt Amazon S3 sterke garanties: een beschikbaarheid van 99,99% en een duurzaamheid van 99,999999999%~\cite{aws_availability}. Bovendien kunnen verschillende opslagklassen worden gebruikt afhankelijk van de toegangspatronen, gaande van S3 Standard voor frequente toegang tot Glacier Deep Archive voor langetermijnarchivering~\cite{aws_classes}.
 
 Toegangsbeheer wordt in S3 geregeld via \textit{IAM policies}, \textit{bucket policies} en optioneel \textit{access points}. Deze mechanismen maken fijnmazige controle mogelijk over wie welke bestanden mag lezen, schrijven of verwijderen, wat toelaat om rolgebaseerde toegang toe te passen voor lesgevers en beheerders~\cite{aws_accesscontrol}.
 
@@ -116,7 +116,6 @@ Spaces biedt toegangsbeheer via per-bucket toegangssleutels en bucket policies. 
 Tot slot is Spaces gebruiksvriendelijk voor zowel technische als niet-technische gebruikers. Het DigitalOcean Controlepaneel biedt drag-and-drop functionaliteit voor bestandbeheer, terwijl geavanceerde taken mogelijk zijn via CLI-tools zoals s3cmd of de AWS CLI~\cite{do_ui}. Dit maakt het beheer toegankelijk voor lesgevers en vrijwilligers van AZL die minder technische ervaring hebben.
 
 Gezien de eenvoudige integratie, het transparante kostenmodel en de S3-compatibiliteit vormt DigitalOcean Spaces een sterke kandidaat als cloudopslagoplossing voor AZL. Het is met name aantrekkelijk voor kleine tot middelgrote organisaties die streven naar een evenwicht tussen functionaliteit, veiligheid en budgetbeheer.
-
 
 \subsection{Nextcloud}
 Nextcloud is een open-source cloudopslagoplossing die bekend staat om zijn flexibiliteit en controle over gegevens. Het biedt een privé cloudopslagplatform dat bedrijven in staat stelt om hun eigen infrastructuur te gebruiken voor het hosten van hun gegevens, in plaats van afhankelijk te zijn van externe providers. Nextcloud ondersteunt integraties met externe diensten zoals Dropbox, Google Drive en Amazon S3, en biedt uitgebreide mogelijkheden voor bestandssynchronisatie en delen \autocite{nextcloud_features}.
