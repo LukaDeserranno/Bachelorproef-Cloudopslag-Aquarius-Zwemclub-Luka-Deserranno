@@ -59,12 +59,11 @@ Om de longlist te reduceren tot een shortlist, worden de alternatieven getoetst 
 Alvorens de technische integratiemogelijkheden specifiek voor de frontend te bekijken, worden deze drie kandidaten getoetst aan de cruciale 'Must Have' functionele vereisten, zoals samengevat in Tabel~\ref{tab:musthave-vergelijking}.
 
 
-\begin{table}[htbp]
+\begin{table}[H]
     \centering
     \scriptsize % Changed from footnotesize to scriptsize for more compact text
     \setlength{\tabcolsep}{4pt} % Reduce horizontal spacing between columns
     \renewcommand{\arraystretch}{0.9} % Slightly reduce vertical spacing
-    \caption[Toetsing shortlist aan Must Have vereisten]{\label{tab:musthave-vergelijking}Toetsing van de shortlist aan de 'Must Have' functionele en niet-functionele vereisten.}
     \begin{tabularx}{\textwidth}{l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
       \toprule
       \textbf{Must Have Vereiste} & \textbf{Amazon S3} & \textbf{DigitalOcean Spaces} & \textbf{Nextcloud} \\
@@ -92,6 +91,7 @@ Alvorens de technische integratiemogelijkheden specifiek voor de frontend te bek
       Kosteneffectiviteit & Pay-as-you-go, kan complex/duur worden. Gratis tier beperkt. & Voorspelbaar, vast bedrag voor ruime quota. Zeer goed. & Self-hosted: infra/onderhoudskosten. Hosted: abonnementskosten. Geen licentiekosten. \\
       \bottomrule
     \end{tabularx}
+    \caption[Toetsing shortlist aan Must Have vereisten]{\label{tab:musthave-vergelijking}Toetsing van de shortlist aan de 'Must Have' functionele en niet-functionele vereisten.}
 \end{table}
 
 Tabel~\ref{tab:cloud-integratie-vergelijking-angular} focust vervolgens specifiek op de technische integratiemogelijkheden van de cloudopslagdiensten op de shortlist met Angular-applicaties, wat een belangrijke technische overweging is voor de implementatie.
@@ -99,7 +99,6 @@ Tabel~\ref{tab:cloud-integratie-vergelijking-angular} focust vervolgens specifie
 \begin{table}[H]
     \centering
     \footnotesize
-    \caption[Vergelijking technische integratiemogelijkheden met Angular]{\label{tab:cloud-integratie-vergelijking-angular}Vergelijking van technische integratiemogelijkheden met Angular voor cloudopslagdiensten op de shortlist.}
     \begin{tabularx}{\textwidth}{lXX}
         \toprule
         \textbf{Cloudopslagdienst} & \textbf{Integratie en package (relevant voor Angular/frontend interactie)} & \textbf{Beperkingen/Opmerkingen} \\
@@ -109,6 +108,7 @@ Tabel~\ref{tab:cloud-integratie-vergelijking-angular} focust vervolgens specifie
         Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen HTTP implementatie in Angular & Vereist vaak meer eigen implementatiewerk in de frontend. \\
         \bottomrule
     \end{tabularx}
+    \caption[Vergelijking technische integratiemogelijkheden met Angular]{\label{tab:cloud-integratie-vergelijking-angular}Vergelijking van technische integratiemogelijkheden met Angular voor cloudopslagdiensten op de shortlist.}
 \end{table}
 
 Op basis van de volledige analyse van vereisten (Tabel~\ref{tab:musthave-vergelijking}), technische integratiemogelijkheden (Tabel~\ref{tab:cloud-integratie-vergelijking-angular}), kosten, beheer en de specifieke synergie met de bestaande infrastructuur wordt de uiteindelijke keuze gemaakt.
