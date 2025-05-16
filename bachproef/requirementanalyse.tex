@@ -1,19 +1,31 @@
 \chapter{\IfLanguageName{dutch}{Vergelijking en selectie van cloudopslagoplossingen}{Comparison and selection of cloud storage solutions}}
 \label{ch:vergelijking}
-Dit hoofdstuk behandelt het proces van het identificeren, vergelijken en selecteren van een geschikte cloudopslagoplossing voor Aquarius Zwemclub Lebbeke (AZL), ter vervanging van de huidige Dropbox-implementatie. Het proces start met het definiëren van de vereisten, gevolgd door een overzicht van mogelijke alternatieven, een vergelijkende analyse, en eindigt met de selectie van de meest geschikte oplossing.
+Dit hoofdstuk behandelt het proces van het identificeren, vergelijken en selecteren van een geschikte 
+cloudopslagoplossing voor Aquarius Zwemclub Lebbeke (AZL), ter vervanging van de huidige Dropbox-implementatie. 
+Het proces start met het definiëren van de vereisten, gevolgd door een overzicht van mogelijke oplossingen, 
+een vergelijkende analyse, en eindigt met de selectie van de meest geschikte oplossing.
+
 \section{Functionele en niet-functionele vereisten}
-De selectie van een nieuwe cloudopslagoplossing startte met een grondige analyse van de behoeften van AZL. 
-In samenwerking met de webmaster, die de technische systemen beheert, werden de functionele en niet-functionele 
+De selectie van een nieuwe cloudopslagoplossing start met een grondige analyse van de behoeften van AZL. 
+In samenwerking met de webmaster, die de technische systemen beheert, worden de functionele en niet-functionele 
 eisen vastgesteld om de beperkingen van de huidige Dropbox-opstelling aan te pakken. 
-Deze beperkingen omvatten verouderde toegangsrechten, gebrek aan integratie met de webapplicatie en website, 
-en toegankelijkheidsproblemen voor lesgevers zonder account. De vereisten werden geprioriteerd met de MoSCoW-methode.
+Deze beperkingen omvatten verouderde toegangsrechten, gebrek aan integratie met de webapplicatie, 
+en toegankelijkheidsproblemen voor lesgevers zonder account. De vereisten worden geprioriteerd met de MoSCoW-methode.
 
 \subsection{Functionele vereisten}
-Deze vereisten beschrijven wat het systeem moet kunnen doen:
+Deze vereisten beschrijven wat het systeem functioneel moet ondersteunen:
+
 \begin{itemize}
-    \item \textbf{Efficiënt en dynamisch toegangsbeheer (Must Have):} Het systeem moet toelaten om toegangsrechten voor lesgevers eenvoudig en veilig te beheren, met de mogelijkheid om rechten dynamisch aan te passen op basis van hun status (bv. starten/stoppen bij de club). Gedetailleerde controle is nodig zodat gebruikers enkel toegang hebben tot relevante informatie. Toegang moet mogelijk zijn zonder dat lesgevers een extra account moeten aanmaken.
-    \item \textbf{Integratie met bestaande systemen (Must Have):} Naadloze integratie met de bestaande IT-infrastructuur, specifiek de op maat gemaakte webapplicatie (Angular/Node.js) en de publieke WordPress-website, is cruciaal.
-    \item \textbf{Bestandsbeheer:} Gebruikers (voornamelijk de webmaster en mogelijk lesgevers via de webapplicatie) moeten bestanden kunnen uploaden, downloaden, organiseren in mappen, en delen.
+    \item \textbf{Persoonsgebonden toegangsbeheer (Must Have):} Het systeem maakt het mogelijk om toegangsrechten toe te kennen aan individuele gebruikers, los van hun rol in de organisatie. Elke gebruiker kan unieke rechten hebben per bestand of map.
+    \item \textbf{Volledige toegang voor beheerders (Must Have):} Gebruikers met de rol van admin hebben standaard volledige toegang tot alle bestanden en mappen, ongeacht eventuele andere toegangsbeperkingen.
+    \item \textbf{Fijnmazige toegangscontrole (Must Have):} Het systeem moet ondersteuning bieden voor het instellen van verschillende toegangsniveaus (bijv. lezen, schrijven, beheren) per gebruiker, per map of bestand.
+    \item \textbf{Authenticatie via bestaand systeem (Must Have):} De toegang tot het platform verloopt via het reeds geïmplementeerde authenticatiesysteem van AZL. Er zijn geen extra logins of externe accounts nodig.
+    \item \textbf{Integratie met Angular-webapplicatie (Must Have):} De gekozen oplossing moet geïntegreerd kunnen worden met de bestaande Angular frontend.
+    \item \textbf{Integratie met Node.js-backend (Must Have):} De backendarchitectuur van de applicatie, gebouwd in Node.js, moet naadloos kunnen communiceren met de opslagoplossing.
+    \item \textbf{Bestanden uploaden en downloaden (Must Have):} Gebruikers moeten bestanden kunnen toevoegen aan of ophalen uit de cloudopslag, afhankelijk van hun rechten.
+    \item \textbf{Beheer van mappenstructuur (Should Have):} Gebruikers met voldoende rechten kunnen mappen aanmaken, hernoemen, verwijderen of herstructureren.
+    \item \textbf{Interne bestandsdeling (Should Have):} Gebruikers kunnen bestanden delen met andere leden van AZL via een interne link (URL), zonder tussenkomst van externe tools.
+    \item \textbf{Koppeling met publieke WordPress-website (Could Have):} Waar nodig moet de cloudopslag ook documenten kunnen ontsluiten via de publieke WordPress-website (bv. voor algemene documenten zoals reglementen).
 \end{itemize}
 
 \subsection{Niet-Functionele vereisten}
@@ -29,8 +41,8 @@ Deze vereisten beschrijven de kwaliteitseisen en randvoorwaarden:
 
 \section{Overzicht van cloudopslagalternatieven}
 \label{sec:overzicht_alternatieven}
-Op basis van een literatuurstudie en de gedefinieerde vereisten, werd een longlist van potentiële cloudopslagoplossingen samengesteld. 
-Zowel commerciële als open-source opties werden overwogen. De volgende oplossingen werden geïdentificeerd als potentiële kandidaten:
+Op basis van een literatuurstudie en de gedefinieerde vereisten, wordt een longlist van potentiële cloudopslagoplossingen samengesteld.
+Zowel commerciële als open-source opties worden in overweging genomen. De volgende oplossingen worden geïdentificeerd als potentiële kandidaten:
 \begin{itemize}
     \item \textbf{Dropbox:} De huidige oplossing, meegenomen als benchmark. Biedt een bekende interface maar kent significante problemen voor AZL. Integratie is complex door het ontbreken van OAuth 2.0 in de AZL-applicatie. Gratis opslag is beperkt.
     \item \textbf{Amazon S3:} Toonaangevende, schaalbare objectopslagdienst met uitgebreide API's en beheermogelijkheden (IAM). Integratie via pre-signed URLs is een goede optie. Kosten zijn flexibel maar kunnen complex worden ('pay-as-you-go').
@@ -42,38 +54,91 @@ Zowel commerciële als open-source opties werden overwogen. De volgende oplossin
 
 \section{Vergelijkende tabel: oplossingen versus vereisten}
 \label{sec:vergelijkingstabel}
-Om de longlist te reduceren tot een shortlist, werden de alternatieven getoetst aan de kritieke vereisten van AZL. Dropbox viel af vanwege de fundamentele problemen die de aanleiding vormden voor dit onderzoek. Microsoft Azure en Google Cloud Storage werden als minder ideaal beschouwd vanwege potentiële kostencomplexiteit en beheeroverhead voor een VZW zonder bestaande infrastructuur op die platformen. Dit resulteerde in een shortlist van Amazon S3, DigitalOcean Spaces en Nextcloud.
+Om de longlist te reduceren tot een shortlist, worden de alternatieven getoetst aan de kritieke vereisten van AZL. Dropbox valt af vanwege de fundamentele problemen die de aanleiding vormen voor dit onderzoek. Microsoft Azure en Google Cloud Storage worden als minder ideaal beschouwd vanwege potentiële kostencomplexiteit en beheeroverhead voor een VZW zonder bestaande infrastructuur op die platformen. Dit resulteert in een shortlist van Amazon S3, DigitalOcean Spaces en Nextcloud.
 
-De volgende tabel vergelijkt de technische integratiemogelijkheden van de verschillende cloudopslagdiensten met Angular-applicaties:
+Alvorens de technische integratiemogelijkheden specifiek voor de frontend te bekijken, worden deze drie kandidaten getoetst aan de cruciale 'Must Have' functionele vereisten, zoals samengevat in Tabel~\ref{tab:musthave-vergelijking}.
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \caption[Toetsing shortlist aan Must Have vereisten]{\label{tab:musthave-vergelijking}Toetsing van de shortlist aan de 'Must Have' functionele en niet-functionele vereisten.} % Caption aangepast
+    \begin{tabular}{l p{3.5cm} p{3.5cm} p{3.5cm}}
+      \toprule
+      \textbf{Must Have Vereiste} & \textbf{Amazon S3} & \textbf{DigitalOcean Spaces} & \textbf{Nextcloud} \\
+      \midrule
+      \multicolumn{4}{l}{\textit{Functionele Must Haves}} \\ % Subsectie in tabel
+      Persoonsgebonden toegangsbeheer & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, native gebruikers- en groepenbeheer \\
+      \midrule
+      Volledige toegang voor beheerders & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, via admin rollen en permissies \\
+      \midrule
+      Fijnmazige toegangscontrole & Ja (lezen/schrijven/beheren per object/prefix via policies) & Ja (lezen/schrijven/beheren per object/prefix via S3-compatibele policies) & Ja, gedetailleerde permissies per bestand/map \\
+      \midrule
+      Authenticatie via bestaand systeem & Indirect (via backend applicatie die AZL auth afhandelt) & Indirect (via backend applicatie die AZL auth afhandelt) & Direct mogelijk (bv. OAuth2/OpenID Connect, LDAP) of indirect via backend \\
+      \midrule
+      Integratie Angular-webapplicatie & Hoog (bv. via presigned URLs vanuit backend) & Hoog (bv. via presigned URLs vanuit backend, S3-compatibel) & Middel (WebDAV, specifieke API's, mogelijk meer client-side logica) \\
+      \midrule
+      Integratie Node.js-backend & Uitstekend (AWS SDK) & Uitstekend (AWS SDK, S3-compatibel) & Goed (diverse libraries, WebDAV) \\
+      \midrule
+      Bestanden uploaden en downloaden & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit \\
+      \midrule
+      \multicolumn{4}{l}{\textit{Niet-Functionele Must Haves}} \\ % Subsectie in tabel
+      Gebruiksvriendelijkheid & Beheer: complex (IAM). Eindgebruiker: afhankelijk van app. & Beheer: eenvoudig (DO panel). Eindgebruiker: afhankelijk van app. & Beheer: redelijk (Nextcloud UI). Eindgebruiker: goed (Nextcloud UI/clients). \\
+      \midrule
+      Beveiliging en Privacy & Sterk (encryptie, IAM, logging, etc.) & Sterk (encryptie at rest/transit, S3-compatibele policies) & Sterk (encryptie, permissies, self-hosted optie biedt controle) \\
+      \midrule
+      Kosteneffectiviteit & Pay-as-you-go, kan complex/duur worden. Gratis tier beperkt. & Voorspelbaar, vast bedrag voor ruime quota. Zeer goed. & Self-hosted: infra/onderhoudskosten. Hosted: abonnementskosten. Geen licentiekosten. \\
+      \bottomrule
+    \end{tabular}
+\end{table}
+
+Tabel~\ref{tab:cloud-integratie-vergelijking-angular} focust vervolgens specifiek op de technische integratiemogelijkheden van de cloudopslagdiensten op de shortlist met Angular-applicaties, wat een belangrijke technische overweging is voor de implementatie.
 
 \begin{table}[H]
     \centering
     \footnotesize
     \begin{tabular}{l p{5cm} p{5cm}}
       \toprule
-      \textbf{Cloudopslagdienst} & \textbf{Integratie en package} & \textbf{Beperkingen/Opmerkingen} \\
+      \textbf{Cloudopslagdienst} & \textbf{Integratie en package (relevant voor Angular/frontend interactie)} & \textbf{Beperkingen/Opmerkingen} \\
       \midrule
-      Amazon S3 & Hoog (presigned URLs, STS) – \texttt{aws-sdk} & Complexere configuratie mogelijk \\
-      DigitalOcean Spaces & Hoog (S3-compatibel) – \texttt{aws-sdk} + custom endpoint & Soms beperktere functieset t.o.v. AWS S3 \\
-      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen implementatie & Vereist vaak meer eigen implementatiewerk \\
-      Microsoft Azure & Hoog (SAS tokens) – \texttt{@azure/storage-blob} & Relatief eenvoudige setup met SDK \\
-      Google Cloud Storage & Hoog (signed URLs) – \texttt{@google-cloud/storage} & Zeer veel mogelijkheden, kan complex zijn \\
+      Amazon S3 & Hoog (presigned URLs gegenereerd door backend, directe uploads via STS) – \texttt{aws-sdk} (voornamelijk backend) & Complexere configuratie mogelijk voor directe frontend interactie. \\
+      DigitalOcean Spaces & Hoog (S3-compatibel, presigned URLs gegenereerd door backend) – \texttt{aws-sdk} (voornamelijk backend) + custom endpoint & Soms beperktere functieset t.o.v. AWS S3, maar doorgaans voldoende. \\
+      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen HTTP implementatie in Angular & Vereist vaak meer eigen implementatiewerk in de frontend. \\
       \bottomrule
     \end{tabular}
-    \caption[Vergelijking cloudintegraties]{\label{tab:cloud-integratie-vergelijking}Vergelijking van integratiemethoden voor cloudopslagdiensten.}
+    \caption[Vergelijking technische integratiemogelijkheden met Angular]{\label{tab:cloud-integratie-vergelijking-angular}Vergelijking van technische integratiemogelijkheden met Angular voor cloudopslagdiensten op de shortlist.}
 \end{table}
 
-Op basis van de volledige analyse van vereisten, kosten, beheer en de specifieke synergie met de bestaande infrastructuur werd de uiteindelijke keuze gemaakt.
+Op basis van de volledige analyse van vereisten (Tabel~\ref{tab:musthave-vergelijking}), technische integratiemogelijkheden (Tabel~\ref{tab:cloud-integratie-vergelijking-angular}), kosten, beheer en de specifieke synergie met de bestaande infrastructuur wordt de uiteindelijke keuze gemaakt.
 
 \section{Selectie van de oplossing}
-Op basis van de vergelijkende analyse in Tabel~\ref{tab:cloud-integratie-vergelijking} werd \textbf{DigitalOcean Spaces} geselecteerd als de meest geschikte cloudopslagoplossing voor AZL. De doorslaggevende factoren waren:
+Na een grondige evaluatie van de shortlist (Amazon S3, DigitalOcean Spaces, Nextcloud) aan de hand van alle gedefinieerde 'Must Have'-vereisten (samengevat in Tabel~\ref{tab:musthave-vergelijking}) en de specifieke integratieaspecten (Tabel~\ref{tab:cloud-integratie-vergelijking-angular}), wordt \textbf{DigitalOcean Spaces} geselecteerd als de meest geschikte cloudopslagoplossing voor AZL. Deze keuze is primair gebaseerd op het feit dat DigitalOcean Spaces aantoonbaar voldoet aan alle 'Must Have'-vereisten, gecombineerd met een aantal strategische voordelen voor AZL.
+
+\textbf{Toetsing aan 'Must Have' vereisten voor DigitalOcean Spaces:}
 \begin{enumerate}
-    \item \textbf{Synergie met bestaande infrastructuur:} De hosting van de webapplicatie bij DigitalOcean zorgt voor technische en operationele voordelen, zoals lagere latentie en gecentraliseerd beheer/facturatie.
-    \item \textbf{Eenvoudig en voorspelbaar prijsmodel:} Het vaste maandelijkse bedrag is ideaal voor het budgetbeheer van een VZW en voorkomt onverwachte kosten.
-    \item \textbf{Eenvoudige technische integratie:} De S3-compatibele API maakt integratie met de bestaande Node.js backend relatief eenvoudig met behulp van de AWS SDK.
-    \item \textbf{Gebruiksgemak voor beheer:} Het beheerplatform is al bekend bij de webmaster en staat bekend om zijn eenvoud.
+    % Functionele Must Haves:
+    \item \textbf{Persoonsgebonden toegangsbeheer (Must Have):} Aanwezig. DigitalOcean Spaces, via zijn S3-compatibele API, maakt het mogelijk dit te realiseren. De logica voor het koppelen van AZL-gebruikers aan specifieke rechten op bestanden of mappen zal in de Node.js backend worden geïmplementeerd, die vervolgens de benodigde S3-policies of pre-signed URLs genereert.
+    \item \textbf{Volledige toegang voor beheerders (Must Have):} Aanwezig. Dit kan worden geconfigureerd door beheerdersrollen binnen de AZL-applicatie de nodige brede permissies toe te kennen voor interactie met DigitalOcean Spaces, beheerd via de backend.
+    \item \textbf{Fijnmazige toegangscontrole (Must Have):} Aanwezig. De S3-compatibele API van DigitalOcean Spaces ondersteunt het instellen van gedetailleerde permissies (lezen, schrijven, beheren) per object of per 'prefix' (effectief een map). De AZL-backend zal deze controle implementeren en afdwingen.
+    \item \textbf{Authenticatie via bestaand systeem (Must Have):} Aanwezig. De interactie met DigitalOcean Spaces zal volledig via de AZL Node.js backend verlopen. Gebruikers authenticeren zich bij de AZL-webapplicatie met hun bestaande AZL-account; de backend handelt vervolgens geautoriseerde operaties op Spaces af. Er is geen aparte login voor Spaces nodig voor eindgebruikers.
+    \item \textbf{Integratie met Angular-webapplicatie (Must Have):} Aanwezig. Zoals aangegeven in Tabel~\ref{tab:cloud-integratie-vergelijking-angular}, is integratie goed realiseerbaar. De Angular-frontend zal typisch communiceren met de Node.js backend, die op zijn beurt de interacties met DigitalOcean Spaces faciliteert (bv. door het verstrekken van pre-signed URLs voor directe, maar gecontroleerde, uploads/downloads).
+    \item \textbf{Integratie met Node.js-backend (Must Have):} Aanwezig. Dankzij de S3-compatibiliteit van DigitalOcean Spaces kan de wijdverspreide en goed onderhouden AWS SDK voor JavaScript/Node.js worden gebruikt. Dit vereenvoudigt de ontwikkeling en zorgt voor een robuuste integratie.
+    \item \textbf{Bestanden uploaden en downloaden (Must Have):} Aanwezig. Dit is een kernfunctionaliteit van object storage diensten zoals DigitalOcean Spaces en wordt volledig ondersteund via de S3-compatibele API.
+    % Niet-functionele Must Haves:
+    \item \textbf{Gebruiksvriendelijkheid (Must Have):} Aanwezig. Voor eindgebruikers wordt de gebruiksvriendelijkheid primair bepaald door de intuïtieve interface van de AZL-webapplicatie, die toegang tot de opslag medieert. Voor de webmaster is het beheer van DigitalOcean Spaces via het controlepaneel, dat al in gebruik is voor andere diensten van AZL, bekend en eenvoudig.
+    \item \textbf{Beveiliging en Privacy (Must Have):} Aanwezig. DigitalOcean Spaces biedt standaard encryptie voor data in rust (at rest) en tijdens overdracht (in transit). De fijnmazige toegangscontrole, die via de AZL-backend en S3-compatibele policies wordt geïmplementeerd, waarborgt dat lesgevers en andere gebruikers enkel toegang hebben tot geautoriseerde bestanden en mappen, conform de privacyvereisten.
+    \item \textbf{Kosteneffectiviteit (Must Have):} Aanwezig. Het prijsmodel van DigitalOcean Spaces is zeer voorspelbaar en biedt een ruime hoeveelheid opslag (250 GiB) en dataverkeer (1 TiB transfer) voor een vast, laag maandelijks bedrag (momenteel \$5). Dit past uitstekend binnen het budget van een VZW zoals AZL en voorkomt de onverwachte kosten die bij complexere 'pay-as-you-go'-modellen kunnen optreden.
 \end{enumerate}
 
-Nextcloud werd aangemerkt als de primaire back-up optie, mocht DigitalOcean Spaces tijdens de Proof of Concept (PoC) fase onverwachte beperkingen vertonen. De flexibiliteit en controle over data zijn sterke punten, hoewel de beheerslast hoger ligt. Amazon S3 bleef een technisch valide, maar minder geprefereerde optie vanwege de kostencomplexiteit en het ontbreken van directe synergie.
+\textbf{Bijkomende doorslaggevende factoren voor DigitalOcean Spaces:}
+Naast het voldoen aan alle cruciale 'Must Have'-eisen, versterken de volgende reeds genoemde punten de keuze voor DigitalOcean Spaces:
+\begin{itemize}
+    \item \textbf{Synergie met bestaande infrastructuur:} De hosting van de webapplicatie en andere diensten van AZL bij DigitalOcean zorgt voor technische en operationele voordelen, zoals potentieel lagere latentie, vereenvoudigd netwerkbeheer en gecentraliseerde facturatie.
+    \item \textbf{Eenvoudig en voorspelbaar prijsmodel:} Het vaste maandelijkse bedrag voor een ruime hoeveelheid opslag en transfer is ideaal voor het budgetbeheer van een VZW zoals AZL en voorkomt onverwachte kosten die bij 'pay-as-you-go'-modellen kunnen optreden.
+    \item \textbf{Gebruiksgemak voor beheer:} Het DigitalOcean controlepaneel is reeds bekend bij de webmaster van AZL en staat bekend om zijn gebruiksvriendelijkheid, wat de beheerslast verlaagt.
+\end{itemize}
 
-De volgende stap in het onderzoek was het ontwikkelen en evalueren van een Proof of Concept met DigitalOcean Spaces (zie Hoofdstuk 7).
+Concluderend voldoet DigitalOcean Spaces aan alle gestelde 'Must Have'-vereisten en biedt het de beste combinatie van functionaliteit, kostenefficiëntie, integratiegemak en beheersbaarheid binnen de specifieke context en bestaande infrastructuur van AZL.
+
+Nextcloud geldt als de primaire back-up optie, mocht DigitalOcean Spaces tijdens de Proof of Concept (PoC) fase onverwachte beperkingen vertonen die de 'Must Have'-functionaliteit belemmeren. De flexibiliteit en volledige controle over data zijn sterke punten van Nextcloud, hoewel de beheerslast en initiële configuratie bij self-hosting hoger liggen. Amazon S3 blijft een technisch zeer capabele, maar minder geprefereerde optie vanwege de potentiële kostencomplexiteit voor een kleine VZW en het ontbreken van de directe synergievoordelen die DigitalOcean biedt.
+
+De volgende stap in het onderzoek is het ontwikkelen en evalueren van een~\ref{ch:proof-of-concept} met DigitalOcean Spaces.
