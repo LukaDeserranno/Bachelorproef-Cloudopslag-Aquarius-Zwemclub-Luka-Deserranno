@@ -6,9 +6,23 @@
 
 \section{Introductie}
 
-Tijdens de uitwerking van de proof of concept werd snel duidelijk dat het bestaande rolmodel binnen AZL onvoldoende flexibel was. De bestaande implementatie ondersteunde enkel algemene rollen zoals \texttt{admin} of \texttt{trainer}, maar bood geen gedetailleerde toegangscontrole per map of bestand. Omdat AZL een fijnmaziger toegangsbeheer wilde, werd gekozen om een eigen \texttt{FilePermission}-systeem te ontwikkelen op basis van een gestructureerd database model.
+In dit hoofdstuk wordt een proof of concept (PoC) uitgewerkt voor een fijnmazig toegangsbeheersysteem binnen AZL. De bestaande rolgebaseerde autorisatie bleek te beperkt, omdat enkel generieke rollen zoals \texttt{admin} of \texttt{trainer} ondersteund worden. Daarom wordt een eigen permissiesysteem ontwikkeld dat toegang op map- en bestandsniveau regelt via resource-gebaseerde rechten.
+
+De PoC omvat zowel de modellering van toegangsrechten in de backend als de implementatie van routes met geïntegreerde toegangscontrole. Verder wordt het systeem gekoppeld aan een S3-compatibele opslagdienst (DigitalOcean Spaces), en wordt een Angular-component gebouwd voor bestandsbeheer in de frontend. 
+
+Deze onderdelen worden in de volgende secties behandeld:
+\begin{itemize}
+  \item Sectie \ref{sec:modellering} beschrijft hoe de toegangsrechten gemodelleerd zijn.
+  \item Sectie \ref{sec:routes-backend} bespreekt de integratie van deze rechten in de backendroutes.
+  \item Sectie \ref{sec:permissiecontrole} behandelt de manier waarop permissies toegekend en geërfd worden.
+  \item Sectie \ref{sec:s3-integratie} toont hoe bestanden worden opgeslagen via een S3-compatibele dienst.
+  \item Sectie \ref{sec:frontend-component} bespreekt de frontendcomponent waarmee eindgebruikers bestanden kunnen beheren.
+\end{itemize}
 
 \section{Modellering van toegangsrechten}
+\label{sec:modellering}
+
+Een krachtig toegangsbeheersysteem vereist een heldere structuur voor het koppelen van rechten aan bestanden en mappen. In deze sectie wordt beschreven hoe toegangsrechten worden gemodelleerd via resource-gebaseerde permissies in MongoDB.
 
 Het toegangsrechtensysteem werd opgebouwd rond het idee van \textbf{resource-gebaseerde permissies}. Elk bestand of map is een \emph{resource} waaraan specifieke rechten gekoppeld worden, zoals \texttt{READ}, \texttt{CREATE}, \texttt{UPDATE}, \texttt{DELETE} en \texttt{MANAGE}. Deze rechten worden toegekend aan gebruikers en kunnen ook geërfd worden van bovenliggende mappen.
 
@@ -46,8 +60,11 @@ const filePermissionSchema = new Schema({
 \end{listing}
 
 \section{Routes en integratie met backend}
+\label{sec:routes-backend}
 
-De \texttt{storage}-routes werden volledig herschreven en geïntegreerd met de \texttt{PermissionService}. Elke route controleert nu automatisch of de gebruiker de juiste rechten heeft alvorens toegang toe te staan. Hieronder volgt een voorbeeld van de \texttt{GET /api/files} route:
+Om toegangscontrole effectief toe te passen in de applicatie, worden backendroutes aangepast zodat ze rechten verifiëren vóórdat acties worden uitgevoerd. Deze sectie licht toe hoe routes verbonden zijn met de permissiecontrole.
+
+De \texttt{storage}-routes zijn vanaf nul opgezet en geïntegreerd met de \texttt{PermissionService}. Elke route controleert automatisch of de gebruiker over de juiste rechten beschikt voordat toegang wordt verleend.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -67,6 +84,9 @@ const listFiles = async (req: Request, res: Response): Promise<void> => {
 \end{listing}
 
 \section{Permissiecontrole en overerving}
+\label{sec:permissiecontrole}
+
+Toegangsrechten worden deels expliciet toegekend en deels automatisch overgeërfd van bovenliggende mappen. Deze sectie beschrijft hoe dit mechanisme functioneert in de praktijk.
 
 De kern van het toegangsbeheer zit vervat in de \texttt{PermissionService}. Wanneer een nieuwe map wordt aangemaakt, worden de rechten bepaald op basis van de aanmaker, admins en eventueel overgenomen van een bovenliggende map:
 
@@ -84,6 +104,9 @@ permissions: [
 \end{listing}
 
 \section{Cloudopslag via S3-integratie (DigitalOcean Spaces)}
+\label{sec:s3-integratie}
+
+De bestanden worden opgeslagen in een cloudomgeving via DigitalOcean Spaces. Deze S3-compatibele dienst laat toe om gebruik te maken van bestaande tools zoals de AWS SDK. In deze sectie wordt de volledige integratie toegelicht.
 
 Om de bestanden daadwerkelijk op te slaan werd gebruikgemaakt van \textbf{DigitalOcean Spaces}, een S3-compatibele cloudopslagdienst. Dankzij de compatibiliteit met Amazon's \texttt{S3} API kon gebruik gemaakt worden van de officiële AWS SDK voor Node.js (\texttt{@aws-sdk/client-s3}).
 
@@ -160,6 +183,7 @@ await S3.send(uploadCommand);
 De toegang tot bestanden wordt niet rechtstreeks openbaar gemaakt. In plaats daarvan worden \textbf{gesigneerde URL’s} gegenereerd via \texttt{getSignedUrl}, zodat gebruikers tijdelijk toegang krijgen tot een bestand zonder dat het publiek toegankelijk wordt.
 
 \section{Frontendcomponent: Bestandsbeheer}
+\label{sec:frontend-component}
 
 Om de backendfunctionaliteit bruikbaar te maken voor de eindgebruiker werd een op maat gemaakte Angular-component ontwikkeld. Deze component biedt een overzichtelijke interface voor het beheren van mappen en bestanden, inclusief upload-, download- en navigatiemogelijkheden. De component is beschikbaar op een aparte route die enkel toegankelijk is voor gebruikers met de juiste rol.
 
