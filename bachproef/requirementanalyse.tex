@@ -58,28 +58,39 @@ Om de longlist te reduceren tot een shortlist, worden de alternatieven getoetst 
 
 Alvorens de technische integratiemogelijkheden specifiek voor de frontend te bekijken, worden deze drie kandidaten getoetst aan de cruciale 'Must Have' functionele vereisten, zoals samengevat in Tabel~\ref{tab:musthave-vergelijking}.
 
-\begin{table}[H]
+
+\begin{table}[htbp]
     \centering
-    \footnotesize
+    \scriptsize % Changed from footnotesize to scriptsize for more compact text
+    \setlength{\tabcolsep}{4pt} % Reduce horizontal spacing between columns
+    \renewcommand{\arraystretch}{0.9} % Slightly reduce vertical spacing
     \caption[Toetsing shortlist aan Must Have vereisten]{\label{tab:musthave-vergelijking}Toetsing van de shortlist aan de 'Must Have' functionele en niet-functionele vereisten.}
-    \begin{tabularx}{\textwidth}{lXXX}
-        \toprule
-        \textbf{Must Have Vereiste} & \textbf{Amazon S3} & \textbf{DigitalOcean Spaces} & \textbf{Nextcloud} \\
-        \midrule
-        \multicolumn{4}{l}{\textit{Functionele Must Haves}} \\
-        Persoonsgebonden toegangsbeheer & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, native gebruikers- en groepenbeheer \\
-        Volledige toegang voor beheerders & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, via admin rollen en permissies \\
-        Fijnmazige toegangscontrole & Ja (lezen/schrijven/beheren per object/prefix via policies) & Ja (lezen/schrijven/beheren per object/prefix via S3-compatibele policies) & Ja, gedetailleerde permissies per bestand/map \\
-        Authenticatie via bestaand systeem & Indirect (via backend applicatie die AZL auth afhandelt) & Indirect (via backend applicatie die AZL auth afhandelt) & Direct mogelijk (bv. OAuth2/OpenID Connect, LDAP) of indirect via backend \\
-        Integratie Angular-webapplicatie & Hoog (bv. via presigned URLs vanuit backend) & Hoog (bv. via presigned URLs vanuit backend, S3-compatibel) & Middel (WebDAV, specifieke API's, mogelijk meer client-side logica) \\
-        Integratie Node.js-backend & Uitstekend (AWS SDK) & Uitstekend (AWS SDK, S3-compatibel) & Goed (diverse libraries, WebDAV) \\
-        Bestanden uploaden en downloaden & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit \\
-        \midrule
-        \multicolumn{4}{l}{\textit{Niet-Functionele Must Haves}} \\
-        Gebruiksvriendelijkheid & Beheer: complex (IAM). Eindgebruiker: afhankelijk van app. & Beheer: eenvoudig (DO panel). Eindgebruiker: afhankelijk van app. & Beheer: redelijk (Nextcloud UI). Eindgebruiker: goed (Nextcloud UI/clients). \\
-        Beveiliging en Privacy & Sterk (encryptie, IAM, logging, etc.) & Sterk (encryptie at rest/transit, S3-compatibele policies) & Sterk (encryptie, permissies, self-hosted optie biedt controle) \\
-        Kosteneffectiviteit & Pay-as-you-go, kan complex/duur worden. Gratis tier beperkt. & Voorspelbaar, vast bedrag voor ruime quota. Zeer goed. & Self-hosted: infra/onderhoudskosten. Hosted: abonnementskosten. Geen licentiekosten. \\
-        \bottomrule
+    \begin{tabularx}{\textwidth}{l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+      \toprule
+      \textbf{Must Have Vereiste} & \textbf{Amazon S3} & \textbf{DigitalOcean Spaces} & \textbf{Nextcloud} \\
+      \midrule
+      \multicolumn{4}{l}{\textit{Functionele Must Haves}} \\
+      Persoonsgebonden toegangsbeheer & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, native gebruikers- en groepenbeheer \\
+      \midrule
+      Volledige toegang voor beheerders & Ja, via IAM/policies (logica in backend vereist) & Ja, via S3-compatibele policies (logica in backend vereist) & Ja, via admin rollen en permissies \\
+      \midrule
+      Fijnmazige toegangscontrole & Ja (lezen/schrijven/beheren per object/prefix via policies) & Ja (lezen/schrijven/beheren per object/prefix via S3-compatibele policies) & Ja, gedetailleerde permissies per bestand/map \\
+      \midrule
+      Authenticatie via bestaand systeem & Indirect (via backend applicatie die AZL auth afhandelt) & Indirect (via backend applicatie die AZL auth afhandelt) & Direct mogelijk (bv. OAuth2/OpenID Connect, LDAP) of indirect via backend \\
+      \midrule
+      Integratie Angular-webapplicatie & Hoog (bv. via presigned URLs vanuit backend) & Hoog (bv. via presigned URLs vanuit backend, S3-compatibel) & Middel (WebDAV, specifieke API's, mogelijk meer client-side logica) \\
+      \midrule
+      Integratie Node.js-backend & Uitstekend (AWS SDK) & Uitstekend (AWS SDK, S3-compatibel) & Goed (diverse libraries, WebDAV) \\
+      \midrule
+      Bestanden uploaden en downloaden & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit & Ja, kernfunctionaliteit \\
+      \midrule
+      \multicolumn{4}{l}{\textit{Niet-Functionele Must Haves}} \\
+      Gebruiksvriendelijkheid & Beheer: complex (IAM). Eindgebruiker: afhankelijk van app. & Beheer: eenvoudig (DO panel). Eindgebruiker: afhankelijk van app. & Beheer: redelijk (Nextcloud UI). Eindgebruiker: goed (Nextcloud UI/clients). \\
+      \midrule
+      Beveiliging en Privacy & Sterk (encryptie, IAM, logging, etc.) & Sterk (encryptie at rest/transit, S3-compatibele policies) & Sterk (encryptie, permissies, self-hosted optie biedt controle) \\
+      \midrule
+      Kosteneffectiviteit & Pay-as-you-go, kan complex/duur worden. Gratis tier beperkt. & Voorspelbaar, vast bedrag voor ruime quota. Zeer goed. & Self-hosted: infra/onderhoudskosten. Hosted: abonnementskosten. Geen licentiekosten. \\
+      \bottomrule
     \end{tabularx}
 \end{table}
 
@@ -88,16 +99,16 @@ Tabel~\ref{tab:cloud-integratie-vergelijking-angular} focust vervolgens specifie
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{l p{5cm} p{5cm}}
-      \toprule
-      \textbf{Cloudopslagdienst} & \textbf{Integratie en package (relevant voor Angular/frontend interactie)} & \textbf{Beperkingen/Opmerkingen} \\
-      \midrule
-      Amazon S3 & Hoog (presigned URLs gegenereerd door backend, directe uploads via STS) – \texttt{aws-sdk} (voornamelijk backend) & Complexere configuratie mogelijk voor directe frontend interactie. \\
-      DigitalOcean Spaces & Hoog (S3-compatibel, presigned URLs gegenereerd door backend) – \texttt{aws-sdk} (voornamelijk backend) + custom endpoint & Soms beperktere functieset t.o.v. AWS S3, maar doorgaans voldoende. \\
-      Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen HTTP implementatie in Angular & Vereist vaak meer eigen implementatiewerk in de frontend. \\
-      \bottomrule
-    \end{tabular}
     \caption[Vergelijking technische integratiemogelijkheden met Angular]{\label{tab:cloud-integratie-vergelijking-angular}Vergelijking van technische integratiemogelijkheden met Angular voor cloudopslagdiensten op de shortlist.}
+    \begin{tabularx}{\textwidth}{lXX}
+        \toprule
+        \textbf{Cloudopslagdienst} & \textbf{Integratie en package (relevant voor Angular/frontend interactie)} & \textbf{Beperkingen/Opmerkingen} \\
+        \midrule
+        Amazon S3 & Hoog (presigned URLs gegenereerd door backend, directe uploads via STS) – \texttt{aws-sdk} (voornamelijk backend) & Complexere configuratie mogelijk voor directe frontend interactie. \\
+        DigitalOcean Spaces & Hoog (S3-compatibel, presigned URLs gegenereerd door backend) – \texttt{aws-sdk} (voornamelijk backend) + custom endpoint & Soms beperktere functieset t.o.v. AWS S3, maar doorgaans voldoende. \\
+        Nextcloud & Middel (WebDAV, specifieke API's) – \texttt{nextcloud-client} of eigen HTTP implementatie in Angular & Vereist vaak meer eigen implementatiewerk in de frontend. \\
+        \bottomrule
+    \end{tabularx}
 \end{table}
 
 Op basis van de volledige analyse van vereisten (Tabel~\ref{tab:musthave-vergelijking}), technische integratiemogelijkheden (Tabel~\ref{tab:cloud-integratie-vergelijking-angular}), kosten, beheer en de specifieke synergie met de bestaande infrastructuur wordt de uiteindelijke keuze gemaakt.
