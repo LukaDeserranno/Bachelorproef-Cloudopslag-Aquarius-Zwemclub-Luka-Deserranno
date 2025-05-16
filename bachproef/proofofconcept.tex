@@ -1,298 +1,241 @@
 %%---------- Proof of Concept --------------------
 % In dit document wordt de proof of concept beschreven
-
 \chapter{\IfLanguageName{dutch}{Proof of Concept}{Proof of Concept}}
 \label{ch:proof-of-concept}
-
 \section{Introductie}
-
-In dit hoofdstuk wordt een proof of concept (PoC) uitgewerkt voor een fijnmazig toegangsbeheersysteem binnen AZL. De bestaande rolgebaseerde autorisatie bleek te beperkt, omdat enkel generieke rollen zoals \texttt{admin} of \texttt{trainer} ondersteund worden. Daarom wordt een eigen permissiesysteem ontwikkeld dat toegang op map- en bestandsniveau regelt via resource-gebaseerde rechten.
-
-De PoC omvat zowel de modellering van toegangsrechten in de backend als de implementatie van routes met geïntegreerde toegangscontrole. Verder wordt het systeem gekoppeld aan een S3-compatibele opslagdienst (DigitalOcean Spaces), en wordt een Angular-component gebouwd voor bestandsbeheer in de frontend. 
-
+In dit hoofdstuk wordt een proof of concept (PoC) uitgewerkt voor een fijnmazig toegangsbeheersysteem binnen AZL. De bestaande rolgebaseerde autorisatie blijkt te beperkt, omdat enkel generieke rollen zoals \texttt{admin} of \texttt{trainer} ondersteund worden. Daarom wordt een eigen permissiesysteem ontwikkeld dat toegang op map- en bestandsniveau regelt via resource-gebaseerde rechten.
+De PoC omvat zowel de modellering van toegangsrechten in de backend als de implementatie van routes met geïntegreerde toegangscontrole. Verder wordt het systeem gekoppeld aan een S3-compatibele opslagdienst (DigitalOcean Spaces), en wordt een Angular-component gebouwd voor bestandsbeheer in de frontend.
 Deze onderdelen worden in de volgende secties behandeld:
 \begin{itemize}
-  \item Sectie \ref{sec:modellering} beschrijft hoe de toegangsrechten gemodelleerd zijn.
-  \item Sectie \ref{sec:routes-backend} bespreekt de integratie van deze rechten in de backendroutes.
-  \item Sectie \ref{sec:permissiecontrole} behandelt de manier waarop permissies toegekend en geërfd worden.
-  \item Sectie \ref{sec:s3-integratie} toont hoe bestanden worden opgeslagen via een S3-compatibele dienst.
-  \item Sectie \ref{sec:frontend-component} bespreekt de frontendcomponent waarmee eindgebruikers bestanden kunnen beheren.
+\item Sectie \ref{sec:modellering} beschrijft hoe de toegangsrechten gemodelleerd zijn.
+\item Sectie \ref{sec:routes-backend} bespreekt de integratie van deze rechten in de backendroutes.
+\item Sectie \ref{sec:permissiecontrole} behandelt de manier waarop permissies toegekend en geërfd worden.
+\item Sectie \ref{sec:s3-integratie} toont hoe bestanden worden opgeslagen via een S3-compatibele dienst.
+\item Sectie \ref{sec:frontend-component} bespreekt de frontendcomponent waarmee eindgebruikers bestanden kunnen beheren.
 \end{itemize}
-
 \section{Modellering van toegangsrechten}
 \label{sec:modellering}
-
 Een krachtig toegangsbeheersysteem vereist een heldere structuur voor het koppelen van rechten aan bestanden en mappen. In deze sectie wordt beschreven hoe toegangsrechten worden gemodelleerd via resource-gebaseerde permissies in MongoDB.
-
-Het toegangsrechtensysteem werd opgebouwd rond het idee van \textbf{resource-gebaseerde permissies}. Elk bestand of map is een \emph{resource} waaraan specifieke rechten gekoppeld worden, zoals \texttt{READ}, \texttt{CREATE}, \texttt{UPDATE}, \texttt{DELETE} en \texttt{MANAGE}. Deze rechten worden toegekend aan gebruikers en kunnen ook geërfd worden van bovenliggende mappen.
-
+Het toegangsrechtensysteem is opgebouwd rond het idee van \textbf{resource-gebaseerde permissies}. Elk bestand of map is een \emph{resource} waaraan specifieke rechten gekoppeld worden, zoals \texttt{READ}, \texttt{CREATE}, \texttt{UPDATE}, \texttt{DELETE} en \texttt{MANAGE}. Deze rechten worden toegekend aan gebruikers en kunnen ook geërfd worden van bovenliggende mappen.
 \begin{listing}[H]
 \begin{minted}{typescript}
 export enum FilePermissionRole {
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-  MANAGE = 'MANAGE'
+READ = 'READ',
+CREATE = 'CREATE',
+UPDATE = 'UPDATE',
+DELETE = 'DELETE',
+MANAGE = 'MANAGE'
 }
 \end{minted}
 \caption[Permissierollen per bestand of map]{Enum die de beschikbare permissierollen definieert.}
 \end{listing}
-
 Voor elk resourcepad wordt er een document aangemaakt in MongoDB:
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 const filePermissionSchema = new Schema({
-  resourceType: { type: String, enum: ['folder', 'file'], required: true },
-  resourcePath: { type: String, required: true, unique: true },
-  ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  permissions: [{
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    roles: { type: [String], enum: Object.values(FilePermissionRole), required: true },
-    inherited: { type: Boolean, default: false, required: true }
-  }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+resourceType: { type: String, enum: ['folder', 'file'], required: true },
+resourcePath: { type: String, required: true, unique: true },
+ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+permissions: [{
+userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+roles: { type: [String], enum: Object.values(FilePermissionRole), required: true },
+inherited: { type: Boolean, default: false, required: true }
+}],
+createdAt: { type: Date, default: Date.now },
+updatedAt: { type: Date, default: Date.now }
 });
 \end{minted}
 \caption[Schema voor FilePermission documenten]{Mongoose-schema voor toegangsbeheer per map of bestand.}
 \end{listing}
-
 \section{Routes en integratie met backend}
 \label{sec:routes-backend}
-
 Om toegangscontrole effectief toe te passen in de applicatie, worden backendroutes aangepast zodat ze rechten verifiëren vóórdat acties worden uitgevoerd. Deze sectie licht toe hoe routes verbonden zijn met de permissiecontrole.
-
 De \texttt{storage}-routes zijn vanaf nul opgezet en geïntegreerd met de \texttt{PermissionService}. Elke route controleert automatisch of de gebruiker over de juiste rechten beschikt voordat toegang wordt verleend.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 const listFiles = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.session.userId;
-  const request: ListFilesRequest = {
-    prefix: req.query.prefix as string,
-    maxKeys: req.query.maxKeys ? parseInt(req.query.maxKeys as string, 10) : undefined,
-    continuationToken: req.query.continuationToken as string,
-  };
-
-  const response = await storageService.listFiles(request, userId);
-  res.status(response.code).json(response);
+const userId = req.session.userId;
+const request: ListFilesRequest = {
+prefix: req.query.prefix as string,
+maxKeys: req.query.maxKeys ? parseInt(req.query.maxKeys as string, 10) : undefined,
+continuationToken: req.query.continuationToken as string,
+};
+const response = await storageService.listFiles(request, userId);
+res.status(response.code).json(response);
 };
 \end{minted}
 \caption[Route voor bestandsoverzicht]{Voorbeeld van de backendroute voor het ophalen van bestanden met toegangscontrole.}
 \end{listing}
-
 \section{Permissiecontrole en overerving}
 \label{sec:permissiecontrole}
-
 Toegangsrechten worden deels expliciet toegekend en deels automatisch overgeërfd van bovenliggende mappen. Deze sectie beschrijft hoe dit mechanisme functioneert in de praktijk.
-
 De kern van het toegangsbeheer zit vervat in de \texttt{PermissionService}. Wanneer een nieuwe map wordt aangemaakt, worden de rechten bepaald op basis van de aanmaker, admins en eventueel overgenomen van een bovenliggende map:
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 permissions: [
-  { userId: creatorId, roles: [READ, CREATE, UPDATE, DELETE, MANAGE], inherited: false },
-  ...adminUsers.map(adminId => ({ userId: adminId, roles: [...], inherited: false })),
-  ...(parentPermissions ? parentPermissions.permissions.map(p => ({
-    userId: p.userId, roles: p.roles, inherited: true
-  })) : [])
+{ userId: creatorId, roles: [READ, CREATE, UPDATE, DELETE, MANAGE], inherited: false },
+...adminUsers.map(adminId => ({ userId: adminId, roles: [...], inherited: false })),
+...(parentPermissions ? parentPermissions.permissions.map(p => ({
+userId: p.userId, roles: p.roles, inherited: true
+})) : [])
 ]
 \end{minted}
 \caption[Opbouw van permissies bij mapcreatie]{Rechten worden opgebouwd met directe en geërfde permissies.}
 \end{listing}
-
 \section{Cloudopslag via S3-integratie (DigitalOcean Spaces)}
 \label{sec:s3-integratie}
-
-De bestanden worden opgeslagen in een cloudomgeving via DigitalOcean Spaces. Deze S3-compatibele dienst laat toe om gebruik te maken van bestaande tools zoals de AWS SDK. In deze sectie wordt de volledige integratie toegelicht.
-
-Om de bestanden daadwerkelijk op te slaan werd gebruikgemaakt van \textbf{DigitalOcean Spaces}, een S3-compatibele cloudopslagdienst. Dankzij de compatibiliteit met Amazon's \texttt{S3} API kon gebruik gemaakt worden van de officiële AWS SDK voor Node.js (\texttt{@aws-sdk/client-s3}).
-
+De bestanden worden opgeslagen in een cloudomgeving via DigitalOcean Spaces. Deze S3-compatibele dienst maakt het mogelijk om gebruik te maken van bestaande tools zoals de AWS SDK. In deze sectie wordt de volledige integratie toegelicht.
+Om de bestanden daadwerkelijk op te slaan wordt gebruikgemaakt van \textbf{DigitalOcean Spaces}, een S3-compatibele cloudopslagdienst. Dankzij de compatibiliteit met Amazon's \texttt{S3} API kan gebruik gemaakt worden van de officiële AWS SDK voor Node.js (\texttt{@aws-sdk/client-s3}).
 \subsection{Configuratie van omgevingsvariabelen}
-
 Alle benodigde connectie-instellingen worden beheerd via een configuratiebestand. Zo kunnen sleutels en endpoints eenvoudig aangepast worden zonder de applicatiecode te wijzigen.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 export default {
-  // S3 configuration
-  S3_ENDPOINT: 'S3_ENDPOINT',
-  S3_REGION: 'S3_REGION',
-  S3_BUCKET_NAME: 'S3_BUCKET_NAME',
-  S3_ACCESS_KEY: 'S3_ACCESS_KEY',
-  S3_SECRET_ACCESS_KEY: 'S3_SECRET_ACCESS_KEY',
+// S3 configuration
+S3_ENDPOINT: 'S3_ENDPOINT',
+S3_REGION: 'S3_REGION',
+S3_BUCKET_NAME: 'S3_BUCKET_NAME',
+S3_ACCESS_KEY: 'S3_ACCESS_KEY',
+S3_SECRET_ACCESS_KEY: 'S3_SECRET_ACCESS_KEY',
 };
 \end{minted}
 \caption[Omgevingsvariabelen voor S3]{Configuratie van S3-compatibele opslag via \texttt{config}.}
 \end{listing}
-
 \subsection{Initialisatie van de S3-client}
-
 De S3-client wordt geïnitialiseerd met de juiste toegangssleutels en endpoint. Dit gebeurt in een apart \texttt{aws.ts}-bestand, waardoor hergebruik in andere services mogelijk blijft.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 export const S3 = new S3Client({
-  credentials: {
-    accessKeyId: S3_ACCESS_KEY,
-    secretAccessKey: S3_SECRET_ACCESS_KEY,
-  },
-  endpoint: S3_ENDPOINT,
-  region: S3_REGION,
+credentials: {
+accessKeyId: S3_ACCESS_KEY,
+secretAccessKey: S3_SECRET_ACCESS_KEY,
+},
+endpoint: S3_ENDPOINT,
+region: S3_REGION,
 });
 \end{minted}
 \caption[Initialisatie van de S3-client]{Verbinding maken met DigitalOcean Spaces via de AWS SDK.}
 \end{listing}
-
 \subsection{Gebruik in de StorageService}
-
-De interactie met de cloudopslag gebeurt via AWS-commando’s zoals \texttt{PutObjectCommand} voor upload, \texttt{GetObjectCommand} voor download, en \texttt{ListObjectsV2Command} voor overzicht. Een voorbeeld van het importeren van deze commando’s:
-
+De interactie met de cloudopslag gebeurt via AWS-commando's zoals \texttt{PutObjectCommand} voor upload, \texttt{GetObjectCommand} voor download, en \texttt{ListObjectsV2Command} voor overzicht. Een voorbeeld van het importeren van deze commando's:
 \begin{listing}[H]
 \begin{minted}{typescript}
 import {
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsV2Command,
-  HeadObjectCommand
+PutObjectCommand,
+GetObjectCommand,
+DeleteObjectCommand,
+ListObjectsV2Command,
+HeadObjectCommand
 } from '@aws-sdk/client-s3';
 \end{minted}
 \caption[Import van S3-commando's]{Import van S3-commando's om bestanden te beheren in de cloud.}
 \end{listing}
-
-Bij het uploaden van een bestand wordt bijvoorbeeld volgende commando gebruikt:
-
+Bij het uploaden van een bestand wordt bijvoorbeeld het volgende commando gebruikt:
 \begin{listing}[H]
 \begin{minted}{typescript}
 const uploadCommand = new PutObjectCommand({
-  Bucket: S3_BUCKET,
-  Key: path,
-  Body: buffer,
-  ContentType: mimeType,
+Bucket: S3_BUCKET,
+Key: path,
+Body: buffer,
+ContentType: mimeType,
 });
 await S3.send(uploadCommand);
 \end{minted}
 \caption[Uploaden van bestanden naar S3]{Uploadcommando voor het opslaan van bestanden in DigitalOcean Spaces.}
 \end{listing}
-
 \subsection{Beveiliging}
-
-De toegang tot bestanden wordt niet rechtstreeks openbaar gemaakt. In plaats daarvan worden \textbf{gesigneerde URL’s} gegenereerd via \texttt{getSignedUrl}, zodat gebruikers tijdelijk toegang krijgen tot een bestand zonder dat het publiek toegankelijk wordt.
-
+De toegang tot bestanden wordt niet rechtstreeks openbaar gemaakt. In plaats daarvan worden \textbf{gesigneerde URL's} gegenereerd via \texttt{getSignedUrl}, zodat gebruikers tijdelijk toegang krijgen tot een bestand zonder dat het publiek toegankelijk wordt.
 \section{Frontendcomponent: Bestandsbeheer}
 \label{sec:frontend-component}
-
-Om de backendfunctionaliteit bruikbaar te maken voor de eindgebruiker werd een op maat gemaakte Angular-component ontwikkeld. Deze component biedt een overzichtelijke interface voor het beheren van mappen en bestanden, inclusief upload-, download- en navigatiemogelijkheden. De component is beschikbaar op een aparte route die enkel toegankelijk is voor gebruikers met de juiste rol.
-
+Om de backendfunctionaliteit bruikbaar te maken voor de eindgebruiker is een op maat gemaakte Angular-component ontwikkeld. Deze component biedt een overzichtelijke interface voor het beheren van mappen en bestanden, inclusief upload-, download- en navigatiemogelijkheden. De component is beschikbaar op een aparte route die enkel toegankelijk is voor gebruikers met de juiste rol.
 \subsection{Componentstructuur}
-
 De \texttt{FileManagerComponent} is opgebouwd als standalone component en maakt gebruik van Angular-modules zoals \texttt{FormsModule}, \texttt{RouterModule}, en een custom pipe voor bestandsformaten. De HTML bevat onder andere een breadcrumbnavigatie, een uploadknop en een tabel met alle bestanden.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 @Component({
-  selector: 'app-file-manager',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    FileSizePipe,
-    PageComponent,
-    HttpErrorComponent,
-    LoaderComponent
-  ],
-  templateUrl: './file-manager.component.html',
-  styleUrls: ['./file-manager.component.css']
+selector: 'app-file-manager',
+standalone: true,
+imports: [
+CommonModule,
+RouterModule,
+FormsModule,
+FileSizePipe,
+PageComponent,
+HttpErrorComponent,
+LoaderComponent
+],
+templateUrl: './file-manager.component.html',
+styleUrls: ['./file-manager.component.css']
 })
 export class FileManagerComponent implements OnInit {
-  ...
+...
 }
 \end{minted}
 \caption[Structuur van de FileManagerComponent]{Standalone Angular-component voor bestandsbeheer.}
 \end{listing}
-
 \subsection{Uploadfunctionaliteit}
-
 Bestanden worden geüpload naar het juiste pad via de backend-API. De gebruikersinterface gebruikt \texttt{FormData} en plaatst het geselecteerde bestand op het correcte pad via de Angular-service.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 const uploadRequest = {
-  path: uploadPath,
-  rolesAllowed: []
+path: uploadPath,
+rolesAllowed: []
 };
-
 this.fileManagerApi.uploadFile(uploadRequest, file).subscribe({
-  next: (response) => {
-    this.loadFiles();
-  },
-  error: (error) => {
-    this.error = error;
-  }
+next: (response) => {
+this.loadFiles();
+},
+error: (error) => {
+this.error = error;
+}
 });
 \end{minted}
 \caption[Uploadfunctionaliteit in de component]{Bestanden worden geüpload met behulp van FormData en de API-service.}
 \end{listing}
-
 \subsection{Communicatie met de backend}
-
 Alle communicatie tussen frontend en backend verloopt via de \texttt{FileManagerApiService}. Deze service definieert methodes zoals \texttt{listFiles}, \texttt{getSignedUrl}, \texttt{uploadFile}, \texttt{createFolder} en \texttt{deleteFile}.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 listFiles(request: ListFilesRequest): Observable<StorageResponse<StorageFile[]>> {
-  const params: any = {};
-  if (request.prefix) params.prefix = request.prefix;
-  if (request.maxKeys) params.maxKeys = request.maxKeys;
-  if (request.continuationToken) params.continuationToken = request.continuationToken;
-
-  return this.http.get<StorageResponse<StorageFile[]>>(this.baseUrl, { params });
+const params: any = {};
+if (request.prefix) params.prefix = request.prefix;
+if (request.maxKeys) params.maxKeys = request.maxKeys;
+if (request.continuationToken) params.continuationToken = request.continuationToken;
+return this.http.get<StorageResponse<StorageFile[]>>(this.baseUrl, { params });
 }
 \end{minted}
 \caption[API-call naar de backend]{De lijst met bestanden wordt opgehaald via een \texttt{GET} request.}
 \end{listing}
-
 \subsection{Datamodel en types}
-
 De component en service maken gebruik van sterke types voor de communicatie. Het volgende model beschrijft een bestand of map in het systeem:
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 export interface StorageFile {
-  name: string;
-  path: string;
-  size?: number;
-  lastModified?: string;
-  isFolder: boolean;
+name: string;
+path: string;
+size?: number;
+lastModified?: string;
+isFolder: boolean;
 }
 \end{minted}
 \caption[Bestandstype in de frontend]{Interface voor bestanden en mappen in het frontendmodel.}
 \end{listing}
-
 \subsection{Routebescherming}
-
 De component is enkel toegankelijk voor gebruikers met de juiste rechten. Dit wordt afgedwongen via Angular routeguards zoals \texttt{authGuard} en \texttt{permissionGuard}, en beperkt tot specifieke rollen.
-
 \begin{listing}[H]
 \begin{minted}{typescript}
 export const FILE_MANAGER_ROUTES: Routes = [
-  {
-    path: '',
-    canActivate: [authGuard, permissionGuard],
-    data: {
-      roles: [ROLE_ADMIN, ROLE_TRAINER],
-    },
-    loadComponent: () => import('./file-manager.component').then(m => m.FileManagerComponent),
-  },
+{
+path: '',
+canActivate: [authGuard, permissionGuard],
+data: {
+roles: [ROLE_ADMIN, ROLE_TRAINER],
+},
+loadComponent: () => import('./file-manager.component').then(m => m.FileManagerComponent),
+},
 ];
 \end{minted}
 \caption[Routeconfiguratie]{Beveiligde route naar de FileManagerComponent.}
 \end{listing}
-
 \subsection{Gebruiksvriendelijkheid}
-
 De interface is ontworpen met gebruiksgemak in gedachten. Bestanden kunnen eenvoudig worden aangeklikt om te openen of gedownload te worden via een gesigneerde URL. Navigatie via mappen gebeurt via een eenvoudige breadcrumbstructuur. Fouten en laadtoestanden worden duidelijk weergegeven via aparte componenten zoals \texttt{app-loader} en \texttt{app-http-error}.
