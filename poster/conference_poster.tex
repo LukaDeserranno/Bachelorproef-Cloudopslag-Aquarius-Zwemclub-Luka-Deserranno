@@ -51,43 +51,49 @@ Deze aanpak biedt niet enkel voordelen voor AZL, maar kan ook dienen als model v
 
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
 
-\section{Introductie}
+\section{Probleemstelling \& Doelstelling}  
 
-Be quiet! Found them? In Mercia?! The coconut's tropical! But you are dressed as one… Well, what do you want? Knights of Ni, we are but simple travelers who seek the enchanter who lives beyond these woods.
+Aquarius Zwemclub Lebbeke (AZL) maakte tot voor kort gebruik van Dropbox voor het delen van lesmateriaal tussen lesgevers. Dit leidde echter tot structurele problemen: verouderde toegangsrechten, gebrek aan integratie met de bestaande webapplicatie en beperkte toegankelijkheid voor lesgevers zonder Dropbox-account.
 
-Well, what do you want? It's only a model. Camelot! We found them. We shall say `Ni' again to you, if you do not appease us.
+Het doel van deze bachelorproef was om een cloudopslagoplossing te ontwikkelen die:
+\begin{itemize}
+  \item veilig en gebruiksvriendelijk is;
+  \item naadloos integreert met de bestaande Angular/Node.js-infrastructuur van AZL;
+  \item en fijnmazig toegangsbeheer ondersteunt zonder dat extra accounts nodig zijn.
+\end{itemize}
 
-The nose? Shut up! Burn her! I am your king. You don't vote for kings.
+Op basis van een vergelijkende analyse werd gekozen voor een oplossing gebaseerd op DigitalOcean Spaces, in combinatie met een aangepaste gebruikersinterface.
 
-You can't expect to wield supreme power just `cause some watery tart threw a sword at you! Well, we did do the nose. I don't want to talk to you no more, you empty-headed animal food trough water! I fart in your general direction! Your mother was a hamster and your father smelt of elderberries! Now leave before I am forced to taunt you a second time!
+\section{Uitwerking}
 
-Why do you think that she is a witch? We want a shrubbery!! I don't want to talk to you no more, you empty-headed animal food trough water! I fart in your general direction! Your mother was a hamster and your father smelt of elderberries! Now leave before I am forced to taunt you a second time!
+Om na te gaan of de gekozen cloudopslagoplossing voldoet aan de noden van Aquarius Zwemclub Lebbeke (AZL), 
+werd een proof of concept ontwikkeld en getest binnen de bestaande infrastructuur. De oplossing bestaat uit een op maat gemaakte 
+integratie tussen DigitalOcean Spaces (S3-compatibele objectopslag) en de bestaande Angular/Node.js-webapplicatie van AZL. 
+Hierbij werd een fijnmazig toegangsbeheersysteem geïmplementeerd waarbij per gebruiker en per bestand of map specifieke rechten 
+kunnen worden toegekend (lezen, schrijven, beheren).
 
-\section{Experimenten}
-
-A newt? Camelot! Why? No, no, no! Yes, yes. A bit. But she's got a wart.
-
-Shut up! I dunno. Must be a king. Who's that then? Look, my liege! On second thoughts, let's not go there. It is a silly place.
-
-Shut up! Will you shut up?! No, no, no! Yes, yes. A bit. But she's got a wart. He hasn't got shit all over him. It's only a model. It's only a model.
-
-Bring her forward! I don't want to talk to you no more, you empty-headed animal food trough water! I fart in your general direction! Your mother was a hamster and your father smelt of elderberries! Now leave 
-
-\section{Sectie met figuur}
-
-De {\LaTeX} figure-omgeving bepaalt zelf waar een afbeelding komt en dat is meestal niet op de plek in de tekst waar de figure-omgeving gedefinieerd wordt. Als je wilt forceren dat afbeeldingen toch in de flow van de tekst blijven, dan kan je dat zoals hieronder:
+De backend genereert veilige, tijdelijke toegangstokens (pre-signed URLs), waarmee lesgevers via de frontend bestanden kunnen uploaden of downloaden 
+zonder dat zij direct toegang hebben tot de cloudopslag zelf. Daarnaast werd een gebruiksvriendelijke interface ontwikkeld waarin lesgevers bestanden 
+kunnen beheren binnen hun toegestane mappen.
 
 \begin{center}
   \captionsetup{type=figure}
-  \includegraphics[width=1.0\linewidth]{grail}
-  \captionof{figure}{He hasn't got shit all over him. The nose? Where'd you get the coconuts? What do you mean? We shall say `Ni' again to you, if you do not appease us}
+  \includegraphics[width=1.0\linewidth]{file-manager.png}
+  \captionof{figure}{Screenshot van de geïmplementeerde UI-component voor bestandsbeheer. Lesgevers krijgen gepersonaliseerde toegang tot mappen en bestanden via een geïntegreerd systeem met fijnmazige toegangscontrole.}
 \end{center}
 
-Let er wel op dat dit tot problemen met bladschikking kan leiden.
+\section{Conclusies \& Aanbevelingen}  
 
-\section{Conclusies}
+Het proof of concept toont aan dat een op DigitalOcean gebaseerde cloudopslagoplossing, gekoppeld aan een aangepaste Angular-interface, perfect inspeelt op de behoeften van AZL. Lesgevers krijgen eenvoudig toegang tot documenten, zonder bijkomende accounts, en de beheerder beschikt over nauwkeurige controle over toegangsrechten.
 
-Don't underestimate the Force. Oh God, my uncle. How am I ever gonna explain this? I suggest you try it again, Luke. This time, let go your conscious self and act on instinct. Don't be too proud of this technological terror you've constructed. The ability to destroy a planet is insignificant next to the power of the Force.
+De oplossing draagt bij aan:
+\begin{itemize}
+  \item efficiënter beheer van lesmateriaal;
+  \item een gebruiksvriendelijker platform voor alle betrokkenen;
+  \item en een lagere administratieve werklast.
+\end{itemize}
+
+Aanbevolen wordt om het prototype verder uit te rollen binnen AZL en te overwegen het concept te hergebruiken bij gelijkaardige verenigingen.
 
 \section{Toekomstig onderzoek}
 
