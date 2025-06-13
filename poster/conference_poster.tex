@@ -9,31 +9,44 @@
 % Info over de opleiding
 \course{Bachelorproef}
 \studyprogramme{toegepaste informatica}
-\academicyear{2022-2023}
+\academicyear{2024-2025}
 \institution{Hogeschool Gent, Valentin Vaerwyckweg 1, 9000 Gent}
 
 % Info over de bachelorproef
-\title{Titel van uw bachelorproef}
-\subtitle{Ondertitel (eventueel)}
-\author{Voornaam Naam}
-\email{voornaam.familienaam@student.hogent.be}
-\supervisor{Voornaam Naam}
-\cosupervisor{Voornaam Naam (Bedrijf)}
+\title{Alternatieven voor Dropbox bij Aquarius Zwemclub Lebbeke.}
+\subtitle{Een onderzoek naar cloudopslag.}
+\author{Luka Deserranno}
+\email{Luka.Deserranno@student.hogent.be}
+\supervisor{Sonia VanderMeersch}
+\cosupervisor{Thomas Aelbrecht (Aquarius Zwemclub Lebbeke)}
 
 % Indien ingevuld, wordt deze informatie toegevoegd aan het einde van de
 % abstract. Zet in commentaar als je dit niet wilt.
-\specialisation{Systeem- en Netwerkbeheer}
-\keywords{Lambda-calculus, Scheme}
-\projectrepo{https://github.com/user/repo}
+\keywords{Cloudopslag, Angular, Node.js, Toegangsbeheer, DigitalOcean Spaces}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-It's only a model.
-You don't vote for kings. Who's that then? We found them. Ni! Ni! Ni! Ni!
-The nose? On second thoughts, let's not go there. It is a silly place. Bloody Peasant! And the hat. She's a witch! Where'd you get the coconuts?
+Bestandenbeheer bij kleine sportverenigingen blijft een veelvoorkomend knelpunt. Diensten zoals Dropbox en OneDrive worden vaak ingezet, maar kampen met belangrijke beperkingen: ze vereisen extra accounts, bieden beperkte controle over toegangsrechten en integreren moeilijk met bestaande digitale omgevingen.
+
+Ook Aquarius Zwemclub Lebbeke (AZL) ondervond deze problemen. Lesgevers hadden geen uniforme toegang tot bestanden, toegangsrechten waren moeilijk beheersbaar en het beheer verliep grotendeels manueel. Dit leidde tot inefficiëntie en frustratie bij de gebruikers.
+
+In deze bachelorproef werd onderzocht of het mogelijk is een cloudopslagoplossing te implementeren die:
+\begin{itemize}
+\item Naadloos integreert in het bestaande platform van AZL
+\item Fijnmazige toegangscontrole per gebruiker en mapniveau mogelijk maakt
+\item Beschikbaar is zonder dat lesgevers extra accounts moeten aanmaken
+\item Voldoende schaalbaar en toekomstbestendig is
+\end{itemize}
+
+Als oplossing werd gekozen voor een infrastructuur gebaseerd op DigitalOcean, waarbij een eigen cloudomgeving werd opgezet met een intuïtieve gebruikersinterface, rechtstreeks toegankelijk via het interne platform van AZL. Door gebruik te maken van open-source componenten en API-koppelingen werd een oplossing gebouwd die volledig aangepast is aan de noden van de club.
+
+Een proof of concept werd ontwikkeld en getest binnen de bestaande IT-omgeving. De resultaten tonen aan dat deze oplossing het beheer van bestanden sterk vereenvoudigt, de veiligheid verhoogt door betere toegangscontrole, en de gebruikservaring voor lesgevers aanzienlijk verbetert.
+
+Deze aanpak biedt niet enkel voordelen voor AZL, maar kan ook dienen als model voor andere kleine sportorganisaties met gelijkaardige uitdagingen.
+
 \end{abstract}
 
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
